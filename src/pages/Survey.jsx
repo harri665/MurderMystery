@@ -117,34 +117,6 @@ function Progress({ value }) {
   )
 }
 
-function RoleBars({ counts }) {
-  const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1
-  const entries = Object.entries(counts).sort(([, a], [, b]) => b - a)
-  return (
-    <div className="space-y-3">
-      {entries.map(([role, count]) => {
-        const pct = (count / total) * 100
-        return (
-          <div key={role}>
-            <div className="mb-1 flex items-center justify-between">
-              <span className="text-xs font-medium text-slate-700">{ROLE_DESCRIPTIONS[role]?.name || role}</span>
-              <span className="text-xs tabular-nums text-slate-500">{Math.round(pct)}%</span>
-            </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${pct}%` }}
-                transition={{ duration: 0.5 }}
-                className={`h-full bg-${BRAND.primary}-500`}
-              />
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
 function useKeyShortcuts({ onPrev, onNext, onSelect, enabled }) {
   useEffect(() => {
     if (!enabled) return
@@ -245,13 +217,6 @@ export default function Survey() {
     },
   })
 
-  // Live count for sidebar
-  const sideCounts = useMemo(() => {
-    const base = { infiltrator: 0, detective: 0, narrator: 0, analyst: 0, coordinator: 0 }
-    Object.values(answers).forEach((a) => (base[a.role] += 1))
-    return base
-  }, [answers])
-
   // ————————————————————————————————————————————
   // Submitted screen
   // ————————————————————————————————————————————
@@ -290,7 +255,7 @@ export default function Survey() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Top bar */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 p-4">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 p-4">
           <div className="flex items-center gap-3">
             <div className={`grid h-9 w-9 place-items-center rounded-md bg-${BRAND.primary}-600 text-white`}>
               <span className="text-sm font-bold">BC</span>
@@ -307,14 +272,14 @@ export default function Survey() {
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-6xl gap-6 p-6 md:grid-cols-[1fr_320px]">
+      <main className="mx-auto max-w-4xl p-6">
         {/* Card */}
         <motion.section
           key={currentQuestion}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+          className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm"
         >
           {/* Intro / Name */}
           {currentQuestion === -1 ? (
@@ -375,7 +340,6 @@ export default function Survey() {
                           </div>
                           <div>
                             <p className="text-sm text-slate-900">{option.text}</p>
-                            <p className="mt-1 text-xs text-slate-500">Signal: {ROLE_DESCRIPTIONS[option.role]?.name}</p>
                           </div>
                         </div>
                       </motion.div>
@@ -399,16 +363,20 @@ export default function Survey() {
             </div>
 
             {currentQuestion === QUESTIONS.length - 1 ? (
-              <PrimaryButton onClick={submitSurvey} disabled={!isComplete || isSubmitting}>
+              <PrimaryButton 
+                onClick={submitSurvey} 
+                disabled={!isComplete || isSubmitting}
+                className="px-8 py-4 text-lg font-bold bg-green-600 hover:bg-green-700 shadow-lg"
+              >
                 {isSubmitting ? (
                   <>
-                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     Submitting…
                   </>
                 ) : (
                   <>
-                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
-                    Submit
+                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                    Submit Assessment
                   </>
                 )}
               </PrimaryButton>
@@ -420,9 +388,10 @@ export default function Survey() {
                   if (answers[q.id]) nextQuestion()
                 }}
                 disabled={currentQuestion !== -1 && !answers[QUESTIONS[currentQuestion].id]}
+                className="px-8 py-4 text-lg font-bold bg-blue-600 hover:bg-blue-700 shadow-lg"
               >
-                Continue
-                <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/></svg>
+                {currentQuestion === -1 ? 'Start Assessment' : 'Continue'}
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/></svg>
               </PrimaryButton>
             )}
           </div>
@@ -440,20 +409,9 @@ export default function Survey() {
             )}
           </AnimatePresence>
         </motion.section>
-
-        {/* Sidebar */}
-        <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="text-sm font-semibold text-slate-900">Profile indicators</h3>
-          <p className="mt-1 text-xs text-slate-600">Live view based on your selections.</p>
-          <div className="mt-5"><RoleBars counts={sideCounts} /></div>
-
-          <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <p className="text-xs text-slate-600">Reference: <span className="font-mono">{assessmentId}</span></p>
-          </div>
-        </aside>
       </main>
 
-      <footer className="mx-auto max-w-6xl px-6 pb-8">
+      <footer className="mx-auto max-w-4xl px-6 pb-8">
         <p className="text-xs text-slate-500">© {new Date().getFullYear()} Blackwood Corporation • Internal survey • Do not distribute externally.</p>
       </footer>
     </div>

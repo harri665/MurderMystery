@@ -242,6 +242,44 @@
       },
       "surveyResult": "coordinator",
       "surveyCompleted": true
+    },
+    {
+      "id": "aa1f5df6-963c-44e9-9070-e1ad2fc84b56",
+      "name": "Harrison",
+      "roleId": "coordinator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "coordinator",
+      "surveyCompleted": true
+    },
+    {
+      "id": "515e0ce0-f8b4-4d6e-91c4-0954358490e6",
+      "name": "Harrison",
+      "roleId": "infiltrator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true
     }
   ]
 }
