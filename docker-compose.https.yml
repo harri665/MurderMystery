@@ -1,3 +1,4 @@
+# Alternative docker-compose.yml for HTTPS domain
 version: '3.8'
 
 services:
@@ -7,12 +8,12 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        - VITE_API_BASE=https://murdermystery.harrison-martin.com:5081
+        - VITE_API_BASE=https://murdermystery.harrison-martin.com/api
     container_name: murdermystery-frontend
     ports:
       - "5080:80"
     environment:
-      - VITE_API_BASE=https://murdermystery.harrison-martin.com:5081
+      - VITE_API_BASE=https://murdermystery.harrison-martin.com/api
     depends_on:
       - backend
     restart: unless-stopped
@@ -29,7 +30,7 @@ services:
       - "5081:3001"
     environment:
       - PORT=3001
-      - ORIGIN=https://murdermystery.harrison-martin.com:5080,https://murdermystery.harrison-martin.com:5081,https://murdermystery.harrison-martin.com
+      - ORIGIN=https://murdermystery.harrison-martin.com,http://murdermystery.harrison-martin.com
       - NODE_ENV=production
     volumes:
       # Persistent storage for data files - CRITICAL for data persistence
