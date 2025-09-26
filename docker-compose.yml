@@ -1,3 +1,4 @@
+# Fixed Production Docker Compose for Portainer Deployment
 version: '3.8'
 
 services:
@@ -5,38 +6,42 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile.frontend.simple
     container_name: murdermystery-frontend
     ports:
-      - "3000:80"
+      - "80:80"
     environment:
-      - VITE_API_BASE=http://localhost:3001
+      - VITE_API_BASE=http://your-server-ip:3001
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - murdermystery-network
 
   # Backend (Express/Node.js)
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile.backend.simple
     container_name: murdermystery-backend
     ports:
       - "3001:3001"
     environment:
       - PORT=3001
-      - ORIGIN=http://localhost:3000,http://localhost:3001
+      - ORIGIN=http://your-server-ip,http://your-server-ip:3001
       - NODE_ENV=production
     volumes:
-      # Persistent storage for data files
-      - ./data:/app/data
+      # Persistent storage for data files - CRITICAL for data persistence
+      - murdermystery_data:/app/data
     restart: unless-stopped
+    networks:
+      - murdermystery-network
 
 volumes:
-  # Named volume for data persistence (alternative option)
+  # Named volume for persistent data storage
   murdermystery_data:
     driver: local
 
 networks:
-  default:
-    name: murdermystery-network
+  murdermystery-network:
+    driver: bridge
