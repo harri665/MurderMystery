@@ -12,8 +12,12 @@ export default function App(){
   const location = useLocation()
   
   useEffect(()=>{
-    if(!player) nav('/')
-  },[])
+    // Don't redirect admin pages that don't require player authentication
+    const adminRoutes = ['/survey-admin', '/gm', '/survey']
+    if(!player && !adminRoutes.includes(location.pathname)) {
+      nav('/')
+    }
+  },[player, location.pathname, nav])
 
   // Render survey page without any other elements (only for survey routes)
   if (location.pathname === '/survey' || (REDIRECT_HOME_TO_SURVEY && location.pathname === '/')) {
