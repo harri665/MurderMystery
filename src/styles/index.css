@@ -1,0 +1,110 @@
+@import "tailwindcss";
+@layer base {
+  :root { 
+    --brand: 0 100% 50%; /* Blood red */
+    --office-gold: 45 85% 60%; /* Corporate gold */
+    --detective-blue: 210 100% 70%; /* Investigation blue */
+    --shadow-dark: 0 0% 5%; /* Deep shadow */
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-neutral-950 via-red-950/10 to-neutral-900;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .card { 
+    @apply rounded-2xl bg-gradient-to-br from-neutral-900 to-neutral-800 border border-red-900/30 p-6 shadow-2xl;
+    box-shadow: 
+      0 20px 25px -5px rgba(0, 0, 0, 0.5),
+      0 10px 10px -5px rgba(255, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .card-danger {
+    @apply border-red-600/50 bg-gradient-to-br from-red-950/50 to-neutral-900;
+  }
+  
+  .card-evidence {
+    @apply border-blue-600/30 bg-gradient-to-br from-blue-950/30 to-neutral-900;
+  }
+  
+  .btn { 
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3 border border-neutral-600 
+           bg-gradient-to-r from-neutral-800 to-neutral-700 hover:from-neutral-700 hover:to-neutral-600
+           shadow-lg transition-all duration-200 font-medium;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+  
+  .btn-primary { 
+    @apply bg-gradient-to-r from-red-700 to-red-600 border-red-500 text-white
+           hover:from-red-600 hover:to-red-500 shadow-red-900/30;
+    box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.4);
+  }
+  
+  .btn-detective {
+    @apply bg-gradient-to-r from-blue-700 to-blue-600 border-blue-500 text-white
+           hover:from-blue-600 hover:to-blue-500 shadow-blue-900/30;
+  }
+  
+  .btn-office {
+    @apply bg-gradient-to-r from-yellow-700 to-yellow-600 border-yellow-500 text-black
+           hover:from-yellow-600 hover:to-yellow-500 shadow-yellow-900/30;
+  }
+  
+  .office-header {
+    @apply bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 
+           border-b border-red-900/30 shadow-2xl;
+    background-image: 
+      linear-gradient(90deg, rgba(255, 0, 0, 0.1) 0%, transparent 20%, transparent 80%, rgba(255, 0, 0, 0.1) 100%);
+  }
+  
+  .crime-tape {
+    @apply relative;
+  }
+  
+  .crime-tape::before {
+    content: '';
+    @apply absolute -top-2 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400;
+    background-image: repeating-linear-gradient(
+      45deg,
+      #000 0px,
+      #000 10px,
+      #ffff00 10px,
+      #ffff00 20px
+    );
+  }
+  
+  .bloodstain {
+    @apply relative;
+  }
+  
+  .bloodstain::after {
+    content: '🩸';
+    @apply absolute -top-1 -right-1 text-red-600 text-xs opacity-70;
+  }
+  
+  .evidence-marker {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-mono
+           bg-yellow-500/20 border border-yellow-500/50 text-yellow-300;
+  }
+  
+  .suspect-list {
+    @apply space-y-2;
+  }
+  
+  .suspect-item {
+    @apply flex items-center justify-between p-3 rounded-lg
+           bg-gradient-to-r from-neutral-800 to-neutral-700
+           border border-neutral-600 hover:border-red-500/50 transition-all;
+  }
+  
+  .interrogation-room {
+    @apply bg-gradient-to-br from-neutral-900 via-red-950/20 to-neutral-800
+           border-2 border-red-900/40 rounded-xl p-6 shadow-2xl;
+  }
+}

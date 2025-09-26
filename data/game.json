@@ -1,0 +1,51 @@
+{
+  "startedAt": null,
+  "phase": "LOBBY",
+  "medbay": {
+    "name": "Park with 4 orange benches"
+  },
+  "killCooldownMinutes": 8,
+  "downMinutes": 5,
+  "unpoisonCooldownMinutes": 8,
+  "safeMarkMinutes": 10,
+  "truthBadgesLeft": 2,
+  "safeMarksLeft": 2,
+  "clueSyncLeft": {
+    "BLUE": 1,
+    "GOLD": 1
+  },
+  "detectiveRevives": {
+    "ACT_I": 1,
+    "ACT_II": 1,
+    "ACT_III": 1
+  },
+  "letters": {
+    "BLUE": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "GOLD": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "finalCode": "BLUEROUTE2GOLDROUTE5",
+  "nfcState": {},
+  "playersOnline": {}
+}

@@ -1,0 +1,42 @@
+{
+  "responses": [
+    {
+      "id": "b1717b11-729a-472b-937c-6c68bc03beeb",
+      "name": "Harrison",
+      "playerId": "e74b5981-5159-4da0-98db-edb9ceaf11ea",
+      "answers": [
+        {
+          "questionId": 1,
+          "selectedOption": "A",
+          "role": "infiltrator"
+        },
+        {
+          "questionId": 2,
+          "selectedOption": "E",
+          "role": "coordinator"
+        },
+        {
+          "questionId": 3,
+          "selectedOption": "E",
+          "role": "coordinator"
+        },
+        {
+          "questionId": 4,
+          "selectedOption": "E",
+          "role": "coordinator"
+        },
+        {
+          "questionId": 5,
+          "selectedOption": "E",
+          "role": "coordinator"
+        }
+      ],
+      "result": "coordinator",
+      "roleCounts": {
+        "infiltrator": 1,
+        "coordinator": 4
+      },
+      "timestamp": 1758926842480
+    }
+  ]
+}

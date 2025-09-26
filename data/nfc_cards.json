@@ -1,0 +1,499 @@
+{
+  "cards": [
+    {
+      "id": "blue1",
+      "route": "BLUE",
+      "index": 1,
+      "title": "ChargePoint charging station",
+      "rewardChar": "B",
+      "normal": {
+        "nextRiddle": "Find the beasts we love but sneeze at\u2014where kibble is king.",
+        "passPrompt": "Ask the intern who once crunched lithium data; their hometown unlocks me.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nia",
+          "field": "hometown"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Kung Fu academy",
+        "passPrompt": "Ask about the DevOps' hometown.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "jax",
+          "field": "hometown"
+        }
+      }
+    },
+    {
+      "id": "blue2",
+      "route": "BLUE",
+      "index": 2,
+      "title": "Only Natural Pet",
+      "rewardChar": "L",
+      "normal": {
+        "nextRiddle": "Water carves numbers\u2014seek the stones where the river forgets its bed.",
+        "passPrompt": "Who sneezes near cats and loves grep? Use their favorite tool.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "omar",
+          "field": "favTool"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Arkose Tax & Consulting",
+        "passPrompt": "Use the auditor's surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "felix",
+          "field": "auditor"
+        }
+      }
+    },
+    {
+      "id": "blue3",
+      "route": "BLUE",
+      "index": 3,
+      "title": "River bed",
+      "rewardChar": "U",
+      "normal": {
+        "nextRiddle": "Where logs talk and metrics sing\u2014our data found a home.",
+        "passPrompt": "The runner who believes in UNITY\u2014enter their first team codename.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "rowan",
+          "field": "codename"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Waffles don\u2019t liege without one",
+        "passPrompt": "Enter the CEO's favorite drink.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "favDrink"
+        }
+      }
+    },
+    {
+      "id": "blue4",
+      "route": "BLUE",
+      "index": 4,
+      "title": "Splunk Boulder",
+      "rewardChar": "E",
+      "normal": {
+        "nextRiddle": "Count stars indoors; a caf\u00e9 named for the constellation.",
+        "passPrompt": "Ops\u2019 first love is a search; type the five letters he swears by.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "omar",
+          "field": "favTool"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Boulder Commons",
+        "passPrompt": "Type Legal's mural mnemonic.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "meredith",
+          "field": "mnemonic"
+        }
+      }
+    },
+    {
+      "id": "blue5",
+      "route": "BLUE",
+      "index": 5,
+      "title": "Cassiopeia Caf\u00e9",
+      "rewardChar": "R",
+      "normal": {
+        "nextRiddle": "Don\u2019t liege without one\u2014seek the sweet subsection.",
+        "passPrompt": "Ask the marketer with a Belgian friend; what word they say before waffles?",
+        "answer": {
+          "type": "playerField",
+          "playerId": "cass",
+          "field": "belgian"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Twitter logo sign",
+        "passPrompt": "Type PR's logo animal (WRONG here).",
+        "answer": {
+          "type": "value",
+          "value": "Bird"
+        }
+      }
+    },
+    {
+      "id": "blue6",
+      "route": "BLUE",
+      "index": 6,
+      "title": "Waffles sub-spot",
+      "rewardChar": "O",
+      "normal": {
+        "nextRiddle": "Chirp if you must\u2014find the old bird where a logo once perched.",
+        "passPrompt": "Which exec\u2019s first job made milk foam second nature? Name the drink.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "favDrink"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Park with 4 orange benches",
+        "passPrompt": "Enter Security's SPF number.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "lena",
+          "field": "spf"
+        }
+      }
+    },
+    {
+      "id": "blue7",
+      "route": "BLUE",
+      "index": 7,
+      "title": "Park with 4 orange benches",
+      "rewardChar": "U",
+      "normal": {
+        "nextRiddle": "Where many paths meet\u2014find the commons.",
+        "passPrompt": "Facilities geek knows the orange\u2014give the Pantone number.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "cam",
+          "field": "pantone"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Bike room (hard)",
+        "passPrompt": "Type the CTO's martial art (WRONG here).",
+        "answer": {
+          "type": "playerField",
+          "playerId": "ezra",
+          "field": "martial"
+        }
+      }
+    },
+    {
+      "id": "blue8",
+      "route": "BLUE",
+      "index": 8,
+      "title": "Boulder Commons",
+      "rewardChar": "T",
+      "normal": {
+        "nextRiddle": "Climb the day\u2014see the city through panes.",
+        "passPrompt": "Legal\u2019s favorite duty from the murals\u2014write it.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "meredith",
+          "field": "mnemonic"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Volvo XC90 (outside)",
+        "passPrompt": "Type the CEO's hometown.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "hometown"
+        }
+      }
+    },
+    {
+      "id": "blue9",
+      "route": "BLUE",
+      "index": 9,
+      "title": "Glass stairway",
+      "rewardChar": "E",
+      "normal": {
+        "nextRiddle": "Numbers await where streets converge; make for the address we all whisper.",
+        "passPrompt": "Who maps every stair? Enter their surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "cam",
+          "field": "surname"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Junction sign",
+        "passPrompt": "Enter the auditor's surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "felix",
+          "field": "auditor"
+        }
+      }
+    },
+    {
+      "id": "blue10",
+      "route": "BLUE",
+      "index": 10,
+      "title": "2445 Junction Place (Blue terminal)",
+      "rewardChar": "2",
+      "normal": {
+        "nextRiddle": "BLUE route complete\u2014assemble at final when GOLD is done.",
+        "passPrompt": "Ask the CEO where they grew up.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "hometown"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Fake final: Meredith House (ignore)",
+        "passPrompt": "\u2014",
+        "answer": {
+          "type": "value",
+          "value": "IGNORE"
+        }
+      }
+    },
+    {
+      "id": "gold1",
+      "route": "GOLD",
+      "index": 1,
+      "title": "Boulder Kung Fu academy",
+      "rewardChar": "G",
+      "normal": {
+        "nextRiddle": "Numbers, forms, audits\u2014where returns return.",
+        "passPrompt": "Security learned from Sifu K; type the mentor\u2019s title + letter.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "lena",
+          "field": "mentor"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Only Natural Pet",
+        "passPrompt": "Type Ops' favorite tool.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "omar",
+          "field": "favTool"
+        }
+      }
+    },
+    {
+      "id": "gold2",
+      "route": "GOLD",
+      "index": 2,
+      "title": "Arkose Tax & Consulting",
+      "rewardChar": "O",
+      "normal": {
+        "nextRiddle": "Foam and beans at the log of legends.",
+        "passPrompt": "Finance nerd still remembers their auditor\u2019s name\u2014enter it.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "felix",
+          "field": "auditor"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "River bed",
+        "passPrompt": "Enter Rowan's team codename.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "rowan",
+          "field": "codename"
+        }
+      }
+    },
+    {
+      "id": "gold3",
+      "route": "GOLD",
+      "index": 3,
+      "title": "Logan\u2019s Espresso Caf\u00e9",
+      "rewardChar": "L",
+      "normal": {
+        "nextRiddle": "Skin deep signage where SPF reigns.",
+        "passPrompt": "Who\u2019s first job pulled shots? Enter their favorite drink.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "favDrink"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Bike room (hard)",
+        "passPrompt": "Enter the Pantone orange number.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "cam",
+          "field": "pantone"
+        }
+      }
+    },
+    {
+      "id": "gold4",
+      "route": "GOLD",
+      "index": 4,
+      "title": "Vasa Skin Solutions",
+      "rewardChar": "D",
+      "normal": {
+        "nextRiddle": "Pedals and chains: the hard room.",
+        "passPrompt": "Security\u2019s favorite number for sun.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "lena",
+          "field": "spf"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Murals wall",
+        "passPrompt": "Type PR's favorite logo animal.",
+        "answer": {
+          "type": "value",
+          "value": "Bird"
+        }
+      }
+    },
+    {
+      "id": "gold5",
+      "route": "GOLD",
+      "index": 5,
+      "title": "Bike room (hard)",
+      "rewardChar": "R",
+      "normal": {
+        "nextRiddle": "Painted promises: read the walls of three.",
+        "passPrompt": "CTO\u2019s martial pastime in two words.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "ezra",
+          "field": "martial"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Junction sign",
+        "passPrompt": "Type the CEO's hometown.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "nova",
+          "field": "hometown"
+        }
+      }
+    },
+    {
+      "id": "gold6",
+      "route": "GOLD",
+      "index": 6,
+      "title": "Three murals wall",
+      "rewardChar": "O",
+      "normal": {
+        "nextRiddle": "Find where paths intersect in title, not in track.",
+        "passPrompt": "Type the one word Rowan quotes from these.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "rowan",
+          "field": "motto"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Volvo XC90 (outside)",
+        "passPrompt": "Type Legal\u2019s mnemonic (WRONG here).",
+        "answer": {
+          "type": "playerField",
+          "playerId": "meredith",
+          "field": "mnemonic"
+        }
+      }
+    },
+    {
+      "id": "gold7",
+      "route": "GOLD",
+      "index": 7,
+      "title": "Junction sign",
+      "rewardChar": "U",
+      "normal": {
+        "nextRiddle": "A counsel\u2019s porch you may not cross\u2014observe from the curb.",
+        "passPrompt": "Legal\u2019s mnemonic for duty\u2014write it.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "meredith",
+          "field": "mnemonic"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Big stone benches",
+        "passPrompt": "Enter the auditor's surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "felix",
+          "field": "auditor"
+        }
+      }
+    },
+    {
+      "id": "gold8",
+      "route": "GOLD",
+      "index": 8,
+      "title": "Meredith House (outside)",
+      "rewardChar": "T",
+      "normal": {
+        "nextRiddle": "A big sitting area: white stone shapes await.",
+        "passPrompt": "Type the owner's surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "meredith",
+          "field": "surname"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Glass stairway",
+        "passPrompt": "Type Facilities' surname.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "cam",
+          "field": "surname"
+        }
+      }
+    },
+    {
+      "id": "gold9",
+      "route": "GOLD",
+      "index": 9,
+      "title": "Big sitting area (white stone benches)",
+      "rewardChar": "E",
+      "normal": {
+        "nextRiddle": "Steel and glass, parked prestige.",
+        "passPrompt": "Which investor loves this car? Enter the make.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "victor",
+          "field": "carMake"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "2445 Junction Place",
+        "passPrompt": "Enter Rowan's codename.",
+        "answer": {
+          "type": "playerField",
+          "playerId": "rowan",
+          "field": "codename"
+        }
+      }
+    },
+    {
+      "id": "gold10",
+      "route": "GOLD",
+      "index": 10,
+      "title": "Volvo XC90 (outside)",
+      "rewardChar": "5",
+      "normal": {
+        "nextRiddle": "GOLD route complete\u2014assemble at final.",
+        "passPrompt": "Enter the model.",
+        "answer": {
+          "type": "value",
+          "value": "XC90"
+        }
+      },
+      "decoy": {
+        "nextRiddle": "Twitter sign loop",
+        "passPrompt": "\u2014",
+        "answer": {
+          "type": "value",
+          "value": "IGNORE"
+        }
+      }
+    }
+  ]
+}

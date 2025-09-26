@@ -1,0 +1,247 @@
+{
+  "players": [
+    {
+      "id": "mara",
+      "name": "Mara Quinn",
+      "roleId": "killerA",
+      "isKiller": true,
+      "isDetective": false,
+      "fields": {
+        "codename": "Pallas",
+        "hometown": "Tempe",
+        "drink": "cortado"
+      }
+    },
+    {
+      "id": "jax",
+      "name": "Jax Moreau",
+      "roleId": "killerB",
+      "isKiller": true,
+      "isDetective": false,
+      "fields": {
+        "incident": "regex",
+        "hometown": "Bismarck",
+        "tool": "grep"
+      }
+    },
+    {
+      "id": "iris",
+      "name": "Iris Kline",
+      "roleId": "detective",
+      "isKiller": false,
+      "isDetective": true,
+      "fields": {
+        "dept": "forensics",
+        "internship": "Reno"
+      }
+    },
+    {
+      "id": "nova",
+      "name": "Nova Harper",
+      "roleId": "ceo",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "firstJob": "barista",
+        "favDrink": "cortado",
+        "hometown": "Reno"
+      }
+    },
+    {
+      "id": "ezra",
+      "name": "Ezra Pike",
+      "roleId": "cto",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "commute": "bike",
+        "martial": "Wing Chun",
+        "childMiddle": "Ada"
+      }
+    },
+    {
+      "id": "lena",
+      "name": "Lena Cho",
+      "roleId": "security",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "mentor": "SIFU K",
+        "spf": "50"
+      }
+    },
+    {
+      "id": "sienna",
+      "name": "Sienna Vale",
+      "roleId": "pr",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "logo": "bird",
+        "home": "Boulder"
+      }
+    },
+    {
+      "id": "victor",
+      "name": "Victor Lang",
+      "roleId": "vc",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "carMake": "Volvo",
+        "hometown": "Reno"
+      }
+    },
+    {
+      "id": "omar",
+      "name": "Omar Reyes",
+      "roleId": "ops",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "favTool": "grep"
+      }
+    },
+    {
+      "id": "rowan",
+      "name": "Rowan Hale",
+      "roleId": "product",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "motto": "UNITY",
+        "codename": "Pallas"
+      }
+    },
+    {
+      "id": "nia",
+      "name": "Nia Patel",
+      "roleId": "data",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "startup": "lithium",
+        "hometown": "Fremont",
+        "regex": "PCRE"
+      }
+    },
+    {
+      "id": "cam",
+      "name": "Cam Torres",
+      "roleId": "facilities",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "pantone": "1585",
+        "surname": "Torres"
+      }
+    },
+    {
+      "id": "meredith",
+      "name": "Meredith Shaw",
+      "roleId": "legal",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "mnemonic": "NEIGHBORLY",
+        "surname": "Shaw"
+      }
+    },
+    {
+      "id": "felix",
+      "name": "Felix Dunn",
+      "roleId": "finance",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "auditor": "Arkady"
+      }
+    },
+    {
+      "id": "cass",
+      "name": "Cass Cassio",
+      "roleId": "marketing",
+      "isKiller": false,
+      "isDetective": false,
+      "fields": {
+        "belgian": "Liège"
+      }
+    },
+    {
+      "id": "0e576711-0d31-4aef-98ff-b2efb67ee5df",
+      "name": "Harrison",
+      "roleId": "infiltrator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true
+    },
+    {
+      "id": "6dfead82-229f-43f4-9380-87747163d3ba",
+      "name": "Harrison",
+      "roleId": "infiltrator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true
+    },
+    {
+      "id": "ad6d0d29-3e4d-4ebe-b44a-b14b4496a82d",
+      "name": "Harrison",
+      "roleId": "infiltrator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true
+    },
+    {
+      "id": "e74b5981-5159-4da0-98db-edb9ceaf11ea",
+      "name": "Harrison",
+      "roleId": "coordinator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "coordinator",
+      "surveyCompleted": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Frontend (React/Vite)
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: murdermystery-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE=http://localhost:3001
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Backend (Express/Node.js)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: murdermystery-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - ORIGIN=http://localhost:3000,http://localhost:3001
+      - NODE_ENV=production
+    volumes:
+      # Persistent storage for data files
+      - ./data:/app/data
+    restart: unless-stopped
+
+volumes:
+  # Named volume for data persistence (alternative option)
+  murdermystery_data:
+    driver: local
+
+networks:
+  default:
+    name: murdermystery-network
