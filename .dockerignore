@@ -1,0 +1,22 @@
+# Docker ignore file for Murder Mystery project
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+README.md
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# Don't copy these Docker files into the build context
+Dockerfile*
+docker-compose*
+.dockerignore
