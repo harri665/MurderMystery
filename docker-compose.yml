@@ -8,9 +8,9 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: murdermystery-frontend
     ports:
-      - "80:80"
+      - "5080:80"
     environment:
-      - VITE_API_BASE=http://your-server-ip:3001
+      - VITE_API_BASE=http://your-server-ip:5081
     depends_on:
       - backend
     restart: unless-stopped
@@ -24,10 +24,10 @@ services:
       dockerfile: Dockerfile.backend
     container_name: murdermystery-backend
     ports:
-      - "3001:3001"
+      - "5081:3001"
     environment:
       - PORT=3001
-      - ORIGIN=http://your-server-ip,http://your-server-ip:3001
+      - ORIGIN=http://your-server-ip:5080,http://your-server-ip:5081
       - NODE_ENV=production
     volumes:
       # Persistent storage for data files - CRITICAL for data persistence
