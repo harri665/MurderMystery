@@ -4,11 +4,11 @@ This guide will help you deploy the Murder Mystery website using Docker and Port
 
 ## Files Created
 
-- `docker-compose.yml` - Development setup
-- `docker-compose.prod.yml` - Production setup for Portainer
-- `Dockerfile.frontend` - React/Vite application container
-- `Dockerfile.backend` - Express server container
-- `nginx.conf` - Nginx configuration for frontend
+- `docker-compose.yml` - Production setup with external API backend
+- `Dockerfile.nginx-proxy` - Nginx proxy with frontend build and API routing
+- `Dockerfile.backend` - Express server container (for backend server)
+- `nginx-proxy.conf` - Nginx configuration for proxy and frontend
+- `nginx.conf` - Simple nginx configuration for frontend only
 - `.dockerignore` - Files to exclude from Docker build
 
 ## Persistent Storage
@@ -26,52 +26,74 @@ All data is stored in the Docker volume `murdermystery_data` which persists acro
 
 ## Deployment Options
 
-### Option 1: Local Development
+### Option 1: Frontend Only (External Backend)
+The current configuration assumes the backend is hosted at `mysteryapi.harrison-martin.com`.
+
 ```bash
 docker-compose up -d
 ```
-Access at: http://localhost:3000
+Access frontend at: http://localhost:5080
+Backend API: https://mysteryapi.harrison-martin.com
 
-### Option 2: Production with Portainer
+### Option 2: Full Local Development
+For local development with both frontend and backend:
 
-1. **Upload to your server** - Copy all files to your server
-2. **Edit docker-compose.prod.yml** - Replace `your-server-ip` with your actual server IP
-3. **Deploy in Portainer**:
-   - Go to Portainer → Stacks
-   - Click "Add Stack"
-   - Name: `murdermystery`
-   - Copy content from `docker-compose.prod.yml`
-   - Replace `your-server-ip` with your server's IP address
-   - Click "Deploy the stack"
+1. **Start backend server**:
+   ```bash
+   cd server
+   npm install
+   npm run dev
+   ```
 
-### Option 3: Direct Server Deployment
-```bash
-# Replace YOUR_SERVER_IP with your actual IP
-sed -i 's/your-server-ip/YOUR_SERVER_IP/g' docker-compose.prod.yml
+2. **Start frontend in development mode**:
+   ```bash
+   npm run dev
+   ```
 
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
-```
+Access at: http://localhost:5173 (frontend) and http://localhost:3001 (backend)
+
+### Option 3: Deploy Backend Server
+To deploy the backend to your server (mysteryapi.harrison-martin.com):
+
+1. **Copy server files** to your backend server
+2. **Set environment variables** on the server:
+   ```bash
+   export PORT=3001
+   export NODE_ENV=production
+   export ORIGIN=https://murdermystery.harrison-martin.com,http://murdermystery.harrison-martin.com
+   ```
+3. **Start the backend**:
+   ```bash
+   cd server
+   npm install --production
+   npm start
+   ```
 
 ## Environment Configuration
 
 ### Frontend Environment Variables
-- `VITE_API_BASE` - Backend API URL (default: http://localhost:3001)
+- `VITE_API_BASE` - Backend API URL (set to: https://mysteryapi.harrison-martin.com)
 
-### Backend Environment Variables
+### Backend Environment Variables (for mysteryapi.harrison-martin.com server)
 - `PORT` - Server port (default: 3001)
-- `ORIGIN` - CORS allowed origins
-- `NODE_ENV` - Environment mode
+- `ORIGIN` - CORS allowed origins (should include your frontend domain)
+- `NODE_ENV` - Environment mode (production)
+- Game configuration variables:
+  - `FINAL_CODE` - The final code for winning
+  - `KILL_COOLDOWN` - Minutes between kills
+  - `DOWN_MINUTES` - Minutes a player stays down
+  - `UNPOISON_COOLDOWN` - Minutes between unpoison actions
+  - `SAFE_MARK_MINUTES` - Minutes a location stays safe
 
 ## Port Configuration
 
 ### Development
-- Frontend: http://localhost:3000
-- Backend: http://localhost:3001
+- Frontend: http://localhost:5173 (Vite dev server)
+- Backend: http://localhost:3001 (local development)
 
 ### Production
-- Frontend: http://your-server-ip:80
-- Backend: http://your-server-ip:3001
+- Frontend (Docker): http://localhost:5080 (nginx proxy)
+- Backend: https://mysteryapi.harrison-martin.com (external server)
 
 ## Data Persistence
 

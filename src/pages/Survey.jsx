@@ -2,14 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 import { motion, AnimatePresence } from 'framer-motion'
 
+// —————————————————————————————————————————————
+// Config
+// —————————————————————————————————————————————
 const API = import.meta.env.VITE_API_BASE
+const BRAND = {
+  primary: 'blue', // Tailwind color key for the primary brand tone
+}
 
 const QUESTIONS = [
   {
     id: 1,
     question: "🔍 A witness statement contradicts the group's theory. You…",
     options: [
-      { id: 'A', text: "🎭 Create a distraction; quietly test your own hunch in the shadows.", role: 'infiltrator' },
+      { id: 'A', text: '🎭 Create a distraction; quietly test your own hunch in the shadows.', role: 'infiltrator' },
       { id: 'B', text: '📋 Stop everyone; systematically verify facts before proceeding.', role: 'detective' },
       { id: 'C', text: '📢 Diplomatically guide the narrative and maintain team morale.', role: 'narrator' },
       { id: 'D', text: '💻 Cross-reference security logs, timesheets, and digital patterns.', role: 'analyst' },
@@ -63,74 +69,75 @@ const QUESTIONS = [
 ]
 
 const ROLE_DESCRIPTIONS = {
-  infiltrator: {
-    name: '🎭 The Corporate Infiltrator',
-    description:
-      'You excel at reading office politics, social manipulation, and uncovering secrets through misdirection. You blend into corporate culture while gathering intelligence.'
-  },
-  detective: {
-    name: '🔍 The Lead Investigator',
-    description:
-      "You methodically analyze evidence, verify facts, and solve cases through systematic logical deduction. You're the backbone of any investigation."
-  },
-  narrator: {
-    name: '📢 The Case Coordinator',
-    description:
-      'You guide investigation teams, manage communication between departments, and help others stay focused on solving the case.'
-  },
-  analyst: {
-    name: '💻 The Digital Forensics Specialist',
-    description:
-      'You love technical challenges, data analysis, and systematic approaches to solving complex corporate crimes through technology.'
-  },
-  coordinator: {
-    name: '🗺️ The Tactical Coordinator',
-    description:
-      'You excel at logistics, spatial reasoning, and efficiently organizing people and resources throughout the office complex.'
-  }
+  infiltrator: { name: 'The Corporate Infiltrator' },
+  detective: { name: 'The Lead Investigator' },
+  narrator: { name: 'The Case Coordinator' },
+  analyst: { name: 'The Digital Forensics Specialist' },
+  coordinator: { name: 'The Tactical Coordinator' }
 }
 
 // —————————————————————————————————————————————
-// Utility small components
+// Small UI bits
 // —————————————————————————————————————————————
-function ShineButton({ className = '', children, ...props }) {
+function PrimaryButton({ children, className = '', ...props }) {
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -1 }}
       {...props}
-      className={`relative overflow-hidden rounded-xl px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 ${className}`}
+      className={`inline-flex items-center gap-2 rounded-lg bg-${BRAND.primary}-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-${BRAND.primary}-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-${BRAND.primary}-500 ${className}`}
     >
-      <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-white/0 via-white/25 to-white/0 opacity-60 transition-transform duration-700 group-hover:translate-x-0" />
-      <span className="relative z-10 flex items-center gap-2">{children}</span>
-    </button>
+      {children}
+    </motion.button>
   )
 }
 
-function Meter({ value }) {
+function SecondaryButton({ children, className = '', ...props }) {
   return (
-    <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-800">
-      <div
-        className="h-full w-0 rounded-full bg-gradient-to-r from-red-600 via-rose-500 to-pink-400 shadow-[0_0_20px_rgba(244,63,94,0.35)] transition-all duration-500"
-        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+    <motion.button
+      whileTap={{ scale: 0.98 }}
+      {...props}
+      className={`inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-${BRAND.primary}-500 ${className}`}
+    >
+      {children}
+    </motion.button>
+  )
+}
+
+function Progress({ value }) {
+  return (
+    <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200">
+      <motion.div
+        initial={{ width: 0 }}
+        animate={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        className={`h-full bg-${BRAND.primary}-600`}
       />
     </div>
   )
 }
 
-function RoleLeaderboard({ counts }) {
+function RoleBars({ counts }) {
   const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1
-  const entries = Object.entries(counts)
-    .sort(([, a], [, b]) => b - a)
+  const entries = Object.entries(counts).sort(([, a], [, b]) => b - a)
   return (
     <div className="space-y-3">
       {entries.map(([role, count]) => {
         const pct = (count / total) * 100
         return (
-          <div key={role} className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 p-3">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm font-semibold text-neutral-200">{ROLE_DESCRIPTIONS[role]?.name || role}</span>
-              <span className="text-xs font-mono text-neutral-400">{Math.round(pct)}%</span>
+          <div key={role}>
+            <div className="mb-1 flex items-center justify-between">
+              <span className="text-xs font-medium text-slate-700">{ROLE_DESCRIPTIONS[role]?.name || role}</span>
+              <span className="text-xs tabular-nums text-slate-500">{Math.round(pct)}%</span>
             </div>
-            <Meter value={pct} />
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.5 }}
+                className={`h-full bg-${BRAND.primary}-500`}
+              />
+            </div>
           </div>
         )
       })}
@@ -145,7 +152,6 @@ function useKeyShortcuts({ onPrev, onNext, onSelect, enabled }) {
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
       if (e.key === 'ArrowLeft') onPrev?.()
       if (e.key === 'ArrowRight') onNext?.()
-      // 1-5 select options
       const num = parseInt(e.key, 10)
       if (!Number.isNaN(num) && num >= 1 && num <= 5) onSelect?.(num)
     }
@@ -155,36 +161,30 @@ function useKeyShortcuts({ onPrev, onNext, onSelect, enabled }) {
 }
 
 // —————————————————————————————————————————————
-// Main Component
+// Main Component (Corporate Theme)
 // —————————————————————————————————————————————
 export default function Survey() {
   const [name, setName] = useState('')
   const [answers, setAnswers] = useState({})
-  const [currentQuestion, setCurrentQuestion] = useState(-1) // Start at -1 for name question
+  const [currentQuestion, setCurrentQuestion] = useState(-1)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  // Sticky pseudo-random assessment ID (stable per mount)
   const assessmentId = useMemo(
-    () => `PSY-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+    () => `SRV-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
     []
   )
 
-  const totalQuestions = QUESTIONS.length + 1 // +1 for name
-  const currentStep = currentQuestion + 2 // -1 maps to Step 1
+  const totalQuestions = QUESTIONS.length + 1
+  const currentStep = currentQuestion + 2
 
-  const handleAnswer = (questionId, optionId, role) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: { optionId, role }
-    }))
+  const handleAnswer = (qid, optionId, role) => {
+    setAnswers((prev) => ({ ...prev, [qid]: { optionId, role } }))
   }
-
   const nextQuestion = () => {
     if (currentQuestion < QUESTIONS.length - 1) setCurrentQuestion(currentQuestion + 1)
   }
-
   const prevQuestion = () => {
     if (currentQuestion > -1) setCurrentQuestion(currentQuestion - 1)
   }
@@ -201,8 +201,8 @@ export default function Survey() {
       answers: Object.entries(answers).map(([qId, a]) => ({
         questionId: Number(qId),
         selectedOption: a.optionId,
-        role: a.role
-      }))
+        role: a.role,
+      })),
     }
   }
 
@@ -217,12 +217,12 @@ export default function Survey() {
         result: surveyResult.primaryRole,
         roleCounts: surveyResult.allCounts,
         assessmentId,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       })
       setIsSubmitted(true)
     } catch (err) {
-      console.error('Error submitting survey:', err)
-      setError('Submission failed. Please try again in a moment.')
+      console.error(err)
+      setError('We were unable to submit your responses. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -230,7 +230,7 @@ export default function Survey() {
 
   const isComplete = name.trim() && Object.keys(answers).length === QUESTIONS.length
 
-  // Keyboard shortcuts active only on question steps
+  // Keyboard shortcuts
   useKeyShortcuts({
     enabled: currentQuestion >= 0 && currentQuestion < QUESTIONS.length,
     onPrev: prevQuestion,
@@ -242,263 +242,220 @@ export default function Survey() {
       const q = QUESTIONS[currentQuestion]
       const opt = q?.options[n - 1]
       if (opt) handleAnswer(q.id, opt.id, opt.role)
-    }
+    },
   })
 
-  // Live counts for sidebar meter
+  // Live count for sidebar
   const sideCounts = useMemo(() => {
-    const counts = { infiltrator: 0, detective: 0, narrator: 0, analyst: 0, coordinator: 0 }
-    Object.values(answers).forEach((a) => (counts[a.role] += 1))
-    return counts
+    const base = { infiltrator: 0, detective: 0, narrator: 0, analyst: 0, coordinator: 0 }
+    Object.values(answers).forEach((a) => (base[a.role] += 1))
+    return base
   }, [answers])
 
+  // ————————————————————————————————————————————
+  // Submitted screen
+  // ————————————————————————————————————————————
   if (isSubmitted) {
     return (
-      <div className="relative min-h-screen overflow-hidden bg-neutral-950">
-        {/* Ambient background */}
-        <div className="pointer-events-none absolute inset-0 opacity-40 [background:radial-gradient(ellipse_at_top,rgba(244,63,94,0.15),rgba(0,0,0,0)_45%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:24px_24px] opacity-10" />
-
-        <div className="relative mx-auto grid min-h-screen max-w-5xl place-items-center p-6">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="mx-auto max-w-3xl p-6">
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-neutral-900 via-neutral-900/70 to-neutral-800 p-10 shadow-[0_0_60px_-15px_rgba(16,185,129,0.35)]"
+            className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm"
           >
-            <div className="mb-8 flex items-center justify-center gap-4">
-              <div className="grid h-16 w-16 place-items-center rounded-2xl bg-emerald-600 text-white shadow-lg"><svg className="h-9 w-9" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg></div>
-              <div className="text-center">
-                <h1 className="text-3xl font-extrabold tracking-tight text-emerald-300">ASSESSMENT COMPLETE</h1>
-                <p className="mt-1 text-sm font-mono text-neutral-400">Assessment ID: {assessmentId}</p>
+            <div className="mb-6 flex items-center gap-3">
+              <div className={`grid h-10 w-10 place-items-center rounded-full bg-${BRAND.primary}-600 text-white`}>
+                <svg className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-slate-900">Thank you. Your responses have been recorded.</h1>
+                <p className="text-sm text-slate-600">Reference ID: <span className="font-mono">{assessmentId}</span></p>
               </div>
             </div>
 
-            <div className="mx-auto max-w-2xl space-y-6 text-center">
-              <div className="rounded-2xl border border-neutral-700/70 bg-neutral-900/70 p-6">
-                <p className="mb-1 text-xl text-neutral-200">
-                  Thank you, <span className="font-bold text-blue-400">{name}</span>
-                </p>
-                <p className="text-neutral-400">Your psychological profile has been processed and integrated into our investigation database.</p>
-              </div>
-
-              <div className="rounded-2xl border border-yellow-600/50 bg-yellow-900/20 p-5 text-left">
-                <div className="mb-2 flex items-center gap-2 text-yellow-300"><span>⚠️</span><span className="font-bold">CONFIDENTIALITY NOTICE</span></div>
-                <p className="text-xs leading-relaxed text-yellow-200">This assessment is part of an ongoing investigation. Your responses are confidential and will only be used for authorized security purposes. Please do not discuss the content of this assessment with other personnel.</p>
-              </div>
-            </div>
+            <p className="text-sm text-slate-600">
+              A confirmation has been logged. If you have questions, please contact HR Operations.
+            </p>
           </motion.div>
         </div>
       </div>
     )
   }
 
+  // ————————————————————————————————————————————
+  // Main survey
+  // ————————————————————————————————————————————
   return (
-    <div className="relative min-h-screen overflow-hidden bg-neutral-950">
-      {/* Ambient field + grid */}
-      <div className="pointer-events-none absolute inset-0 opacity-50 [background:radial-gradient(ellipse_at_top,rgba(244,63,94,0.14),rgba(0,0,0,0)_45%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:24px_24px] opacity-10" />
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      {/* Top bar */}
+      <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 p-4">
+          <div className="flex items-center gap-3">
+            <div className={`grid h-9 w-9 place-items-center rounded-md bg-${BRAND.primary}-600 text-white`}>
+              <span className="text-sm font-bold">BC</span>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Blackwood Corporation</p>
+              <p className="text-xs text-slate-500">Employee Survey</p>
+            </div>
+          </div>
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="w-48"><Progress value={(currentStep / totalQuestions) * 100} /></div>
+            <p className="text-xs text-slate-600">Step {currentStep} of {totalQuestions}</p>
+          </div>
+        </div>
+      </header>
 
-      <div className="relative mx-auto max-w-6xl p-6">
-        {/* Header / Brand */}
-        <div className="mb-6 rounded-3xl border border-neutral-800 bg-neutral-900/70 p-6 backdrop-blur">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <div className="flex items-center gap-4">
-              <div className="grid h-12 w-12 place-items-center rounded-xl bg-rose-600 text-white shadow-lg"><span className="text-xl font-black">B</span></div>
+      <main className="mx-auto grid max-w-6xl gap-6 p-6 md:grid-cols-[1fr_320px]">
+        {/* Card */}
+        <motion.section
+          key={currentQuestion}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+          className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        >
+          {/* Intro / Name */}
+          {currentQuestion === -1 ? (
+            <div className="space-y-6">
               <div>
-                <h1 className="text-xl font-bold tracking-wide text-white">BLACKWOOD CORPORATE</h1>
-                <p className="text-xs text-neutral-400">Human Resources Division</p>
+                <h2 className="text-lg font-semibold text-slate-900">Employee Information</h2>
+                <p className="mt-1 text-sm text-slate-600">Please confirm your details to begin.</p>
               </div>
-            </div>
-            <div className="text-right">
-              <p className="text-xs font-mono text-neutral-400">Assessment ID: {assessmentId}</p>
-              <p className="text-xs text-neutral-400">Progress: Step {currentStep} of {totalQuestions}</p>
-              <div className="mt-2 h-2 w-60 overflow-hidden rounded-full bg-neutral-800 sm:w-80">
-                <div
-                  className="h-full w-0 bg-gradient-to-r from-rose-600 via-fuchsia-500 to-pink-400 transition-all duration-500"
-                  style={{ width: `${(currentStep / totalQuestions) * 100}%` }}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700">Full name <span className={`text-${BRAND.primary}-600`}>*</span></label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="First Middle Last"
+                  className={`w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-${BRAND.primary}-500 focus:outline-none focus:ring-2 focus:ring-${BRAND.primary}-200`}
+                  autoFocus
                 />
+                <p className="mt-2 text-xs text-slate-500">Your name is used for attribution only and will not be shared externally.</p>
               </div>
             </div>
-          </div>
-
-          <div className="mt-5 rounded-2xl border border-rose-700/40 bg-rose-950/30 p-4">
-            <h2 className="text-base font-bold text-rose-200">MANDATORY PSYCHOLOGICAL ASSESSMENT</h2>
-            <p className="text-sm text-rose-100/80">Due to recent security incidents, all personnel must complete this assessment as per company policy § 7.3.2</p>
-          </div>
-        </div>
-
-        {/* Main grid: content + live role meter */}
-        <div className="grid gap-6 md:grid-cols-[1fr_320px]">
-          <motion.div
-            key={currentQuestion}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 120, damping: 20 }}
-            className="rounded-3xl border border-neutral-800 bg-neutral-900/70 p-6 backdrop-blur"
-          >
-            {currentQuestion === -1 ? (
-              <div className="space-y-6">
-                <div className="text-center">
-                  <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-blue-600 text-white"><svg className="h-8 w-8" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/></svg></div>
-                  <h2 className="text-2xl font-bold text-blue-300">EMPLOYEE IDENTIFICATION</h2>
-                  <p className="text-blue-200/80">Please provide your information for our records</p>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-semibold text-neutral-300">
-                    Full Legal Name <span className="text-rose-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="First Middle Last"
-                    className="w-full rounded-xl border border-neutral-700/70 bg-neutral-800/80 p-4 font-mono text-lg text-white outline-none ring-rose-500/0 placeholder:text-neutral-500 focus:border-rose-400 focus:ring-2 focus:ring-rose-500/40"
-                    autoFocus
-                  />
-                  <p className="mt-2 flex items-center gap-1 text-xs text-neutral-500"><span className="text-yellow-400">⚠️</span>This information will be cross-referenced with employee database</p>
-                </div>
-
-                <div className="rounded-xl border border-yellow-600/30 bg-yellow-900/10 p-3 text-xs text-yellow-300">
-                  <span className="font-bold">PRIVACY NOTICE:</span> Information collected is used solely for security assessment purposes and will be handled according to company data protection policies.
-                </div>
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <p className={`text-xs font-medium uppercase tracking-wide text-${BRAND.primary}-700`}>Question {currentQuestion + 1} of {QUESTIONS.length}</p>
+                <h2 className="mt-1 text-lg font-semibold text-slate-900">{QUESTIONS[currentQuestion].question}</h2>
+                <p className="mt-1 text-xs text-slate-500">Use keys <kbd className="rounded border border-slate-300 bg-slate-50 px-1">1–5</kbd> to select • <kbd className="rounded border border-slate-300 bg-slate-50 px-1">←</kbd>/<kbd className="rounded border border-slate-300 bg-slate-50 px-1">→</kbd> to navigate</p>
               </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="text-center">
-                  <div className="text-3xl">{['🔍', '🧩', '⏰', '💼', '🃏'][currentQuestion]}</div>
-                  <h2 className="mt-1 text-xl font-semibold tracking-wide text-blue-300">SCENARIO {currentQuestion + 1}</h2>
-                  <p className="mt-3 text-lg leading-relaxed text-neutral-200">{QUESTIONS[currentQuestion].question}</p>
-                </div>
 
-                <div className="mx-auto grid max-w-3xl gap-4">
-                  {QUESTIONS[currentQuestion].options.map((option, idx) => {
-                    const q = QUESTIONS[currentQuestion]
-                    const selected = answers[q.id]?.optionId === option.id
-                    const inputId = `q${q.id}-${option.id}`
-                    return (
-                      <label key={option.id} htmlFor={inputId} className="group relative block cursor-pointer">
-                        <input
-                          id={inputId}
-                          type="radio"
-                          name={`question-${q.id}`}
-                          value={option.id}
-                          checked={selected}
-                          onChange={() => handleAnswer(q.id, option.id, option.role)}
-                          className="peer sr-only"
-                        />
-                        <motion.div
-                          whileHover={{ y: -1, scale: 1.01 }}
-                          className={`rounded-2xl border-2 p-5 transition-all duration-200 ${
-                            selected
-                              ? 'border-rose-500/80 bg-rose-950/30 shadow-[0_0_30px_-10px_rgba(244,63,94,0.6)]'
-                              : 'border-neutral-700/70 bg-neutral-800/60 hover:border-neutral-500/80 hover:bg-neutral-700/50'
-                          }`}
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className={`grid h-10 w-10 place-items-center rounded-lg font-bold ${
-                              selected ? 'bg-rose-600 text-white' : 'bg-neutral-700 text-neutral-200'
-                            }`}>{option.id}</div>
-                            <div>
-                              <div className="text-neutral-200">{option.text}</div>
-                            </div>
+              <div className="grid gap-3">
+                {QUESTIONS[currentQuestion].options.map((option, idx) => {
+                  const q = QUESTIONS[currentQuestion]
+                  const selected = answers[q.id]?.optionId === option.id
+                  const inputId = `q${q.id}-${option.id}`
+                  return (
+                    <label key={option.id} htmlFor={inputId} className="group">
+                      <input
+                        id={inputId}
+                        type="radio"
+                        name={`question-${q.id}`}
+                        value={option.id}
+                        checked={selected}
+                        onChange={() => handleAnswer(q.id, option.id, option.role)}
+                        className="sr-only"
+                      />
+                      <motion.div
+                        whileHover={{ y: -1 }}
+                        className={`rounded-lg border p-4 transition-colors ${
+                          selected
+                            ? `border-${BRAND.primary}-500 bg-${BRAND.primary}-50`
+                            : 'border-slate-200 bg-white hover:border-slate-300'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`grid h-8 w-8 shrink-0 place-items-center rounded-md border ${selected ? `border-${BRAND.primary}-600 bg-${BRAND.primary}-600 text-white` : 'border-slate-300 bg-slate-50 text-slate-700'}`}>
+                            <span className="text-sm font-semibold">{option.id}</span>
                           </div>
-                        </motion.div>
-                      </label>
-                    )
-                  })}
-                </div>
+                          <div>
+                            <p className="text-sm text-slate-900">{option.text}</p>
+                            <p className="mt-1 text-xs text-slate-500">Signal: {ROLE_DESCRIPTIONS[option.role]?.name}</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </label>
+                  )
+                })}
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Navigation */}
-            <div className="mt-8 flex items-center justify-between border-t border-neutral-800 pt-6">
-              <ShineButton
-                onClick={prevQuestion}
-                disabled={currentQuestion === -1}
-                className="group disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-neutral-700 to-neutral-600 hover:from-neutral-600 hover:to-neutral-500"
+          {/* Actions */}
+          <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-6">
+            <SecondaryButton onClick={prevQuestion} disabled={currentQuestion === -1}>
+              <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+              Previous
+            </SecondaryButton>
+
+            <div className="hidden items-center gap-3 sm:flex">
+              <div className="w-48"><Progress value={(currentStep / totalQuestions) * 100} /></div>
+              <p className="text-xs text-slate-600">{Math.round((currentStep / totalQuestions) * 100)}% complete</p>
+            </div>
+
+            {currentQuestion === QUESTIONS.length - 1 ? (
+              <PrimaryButton onClick={submitSurvey} disabled={!isComplete || isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Submitting…
+                  </>
+                ) : (
+                  <>
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
+                    Submit
+                  </>
+                )}
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton
+                onClick={() => {
+                  if (currentQuestion === -1) return setCurrentQuestion(0)
+                  const q = QUESTIONS[currentQuestion]
+                  if (answers[q.id]) nextQuestion()
+                }}
+                disabled={currentQuestion !== -1 && !answers[QUESTIONS[currentQuestion].id]}
               >
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
-                Previous
-              </ShineButton>
-
-              <div className="text-center">
-                <div className="text-sm text-neutral-400">{currentQuestion === -1 ? 'Employee Information' : `Scenario ${currentQuestion + 1}`}</div>
-                <div className="font-mono text-xs text-neutral-500">{Math.round((currentStep / totalQuestions) * 100)}% Complete</div>
-              </div>
-
-              {currentQuestion === QUESTIONS.length - 1 ? (
-                <ShineButton
-                  onClick={submitSurvey}
-                  disabled={!isComplete || isSubmitting}
-                  className="group disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                      Processing…
-                    </>
-                  ) : (
-                    <>
-                      <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/></svg>
-                      Submit Assessment
-                    </>
-                  )}
-                </ShineButton>
-              ) : (
-                <ShineButton
-                  onClick={() => {
-                    if (currentQuestion === -1) return setCurrentQuestion(0)
-                    const q = QUESTIONS[currentQuestion]
-                    if (answers[q.id]) nextQuestion()
-                  }}
-                  disabled={currentQuestion !== -1 && !answers[QUESTIONS[currentQuestion].id]}
-                  className="group disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-500"
-                >
-                  Continue
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/></svg>
-                </ShineButton>
-              )}
-            </div>
-
-            {/* Error toast */}
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="mt-4 rounded-xl border border-red-500/40 bg-red-950/40 p-3 text-sm text-red-200"
-                >
-                  {error}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Sidebar: Assessment Info */}
-          <div className="sticky top-6 h-fit rounded-3xl border border-neutral-800 bg-neutral-900/70 p-6 backdrop-blur">
-            <h3 className="mb-1 text-sm font-bold tracking-wide text-neutral-200">Assessment Status</h3>
-            <p className="mb-5 text-xs text-neutral-400">Complete all scenarios to finish your psychological profile.</p>
-            
-            <div className="space-y-3">
-              <div className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-neutral-200">Questions Complete</span>
-                  <span className="text-xs font-mono text-neutral-400">{Object.keys(answers).length}/{QUESTIONS.length}</span>
-                </div>
-              </div>
-              
-              <div className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-neutral-200">Assessment ID</span>
-                  <span className="text-xs font-mono text-neutral-400">{assessmentId}</span>
-                </div>
-              </div>
-            </div>
+                Continue
+                <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/></svg>
+              </PrimaryButton>
+            )}
           </div>
-        </div>
-      </div>
+
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className={`mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700`}
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.section>
+
+        {/* Sidebar */}
+        <aside className="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="text-sm font-semibold text-slate-900">Profile indicators</h3>
+          <p className="mt-1 text-xs text-slate-600">Live view based on your selections.</p>
+          <div className="mt-5"><RoleBars counts={sideCounts} /></div>
+
+          <div className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <p className="text-xs text-slate-600">Reference: <span className="font-mono">{assessmentId}</span></p>
+          </div>
+        </aside>
+      </main>
+
+      <footer className="mx-auto max-w-6xl px-6 pb-8">
+        <p className="text-xs text-slate-500">© {new Date().getFullYear()} Blackwood Corporation • Internal survey • Do not distribute externally.</p>
+      </footer>
     </div>
   )
 }
