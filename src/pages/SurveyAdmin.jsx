@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const API = import.meta.env.VITE_API_BASE
+const API = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
 
 const ROLE_NAMES = {
   infiltrator: "🎭 Corporate Infiltrator",

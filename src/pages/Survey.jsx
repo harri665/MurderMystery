@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 // Configure axios defaults
 axios.defaults.headers.common['Content-Type'] = 'application/json'
-axios.defaults.withCredentials = true
 
 // —————————————————————————————————————————————
 // Config
@@ -172,7 +171,7 @@ export default function Survey() {
       }
     }
     checkApi()
-  }, [])
+  }, []) // Empty dependency array to run only once
 
   const totalQuestions = QUESTIONS.length + 1
   const currentStep = currentQuestion + 2

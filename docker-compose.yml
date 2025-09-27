@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`mudermystery.harrison-martin.com`)"
+      - "traefik.http.routers.frontend.rule=Host(`murdermystery.harrison-martin.com`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
   # Backend (Express/Node.js)
