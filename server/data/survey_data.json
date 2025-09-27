@@ -37,6 +37,46 @@
         "coordinator": 4
       },
       "timestamp": 1758926842480
+    },
+    {
+      "id": "8c1d5511-f81d-443b-9dc4-42f611951b1f",
+      "name": "Harrison",
+      "playerId": "3dd08aa5-64bd-49fe-a2b1-0f72427fe68c",
+      "answers": [
+        {
+          "questionId": 1,
+          "selectedOption": "A",
+          "role": "infiltrator"
+        },
+        {
+          "questionId": 2,
+          "selectedOption": "C",
+          "role": "narrator"
+        },
+        {
+          "questionId": 3,
+          "selectedOption": "D",
+          "role": "analyst"
+        },
+        {
+          "questionId": 4,
+          "selectedOption": "E",
+          "role": "coordinator"
+        },
+        {
+          "questionId": 5,
+          "selectedOption": "E",
+          "role": "coordinator"
+        }
+      ],
+      "result": "coordinator",
+      "roleCounts": {
+        "infiltrator": 1,
+        "narrator": 1,
+        "analyst": 1,
+        "coordinator": 2
+      },
+      "timestamp": 1758933385997
     }
   ]
 }

@@ -242,6 +242,25 @@
       },
       "surveyResult": "coordinator",
       "surveyCompleted": true
+    },
+    {
+      "id": "3dd08aa5-64bd-49fe-a2b1-0f72427fe68c",
+      "name": "Harrison",
+      "roleId": "coordinator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "coordinator",
+      "surveyCompleted": true
     }
   ]
 }
