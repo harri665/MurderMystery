@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'fs/promises';
 import path from 'path';
+import crypto from 'crypto';
 import {fileURLToPath} from 'url';
 import express from 'express';
 import cors from 'cors';
@@ -20,6 +21,13 @@ app.use(cors({ origin: process.env.ORIGIN?.split(',') || ["http://localhost:5173
 app.use(express.json());
 
 const DATA_DIR = path.join(__dirname, 'data');
+
+// Ensure data directory exists
+try {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+} catch (err) {
+  console.log('Data directory already exists or created successfully');
+}
 
 // ----- helpers -----
 async function readJSON(fname, fallback) {
@@ -143,45 +151,55 @@ app.post('/api/contact', async (req,res)=>{
 
 // Survey endpoints
 app.post('/api/survey/submit', async (req,res)=>{
-  const { name, answers, result, roleCounts, timestamp } = req.body;
-  
-  if (!name || !name.trim()) {
-    return res.status(400).json({ error: "Name is required" });
+  try {
+    const { name, answers, result, roleCounts, timestamp } = req.body;
+    
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+    
+    // Validate required fields
+    if (!answers || !result) {
+      return res.status(400).json({ error: "Missing required survey data" });
+    }
+    
+    // Create account/player based on name and survey result
+    const playerId = crypto.randomUUID();
+    const player = {
+      id: playerId,
+      name: name.trim(),
+      roleId: result, // Use survey result as roleId
+      isKiller: false,
+      isDetective: false,
+      lastKillAt: 0,
+      downUntil: 0,
+      abilities: { unpoisonLastAt: 0, revives: { ACT_I:0, ACT_II:0, ACT_III:0 } },
+      surveyResult: result,
+      surveyCompleted: true
+    };
+    
+    // Add player to players list
+    players.players.push(player);
+    await writeJSON('players.json', players);
+    
+    // Store survey response
+    const submission = { 
+      id: crypto.randomUUID(),
+      name: name.trim(),
+      playerId: playerId,
+      answers,
+      result,
+      roleCounts,
+      timestamp
+    };
+    surveyData.responses.push(submission);
+    await writeJSON('survey_data.json', surveyData);
+    
+    res.json({ ok: true, player: player });
+  } catch (error) {
+    console.error('Survey submission error:', error);
+    res.status(500).json({ error: 'Internal server error during survey submission' });
   }
-  
-  // Create account/player based on name and survey result
-  const playerId = crypto.randomUUID();
-  const player = {
-    id: playerId,
-    name: name.trim(),
-    roleId: result, // Use survey result as roleId
-    isKiller: false,
-    isDetective: false,
-    lastKillAt: 0,
-    downUntil: 0,
-    abilities: { unpoisonLastAt: 0, revives: { ACT_I:0, ACT_II:0, ACT_III:0 } },
-    surveyResult: result,
-    surveyCompleted: true
-  };
-  
-  // Add player to players list
-  players.players.push(player);
-  await writeJSON('players.json', players);
-  
-  // Store survey response
-  const submission = { 
-    id: crypto.randomUUID(),
-    name: name.trim(),
-    playerId: playerId,
-    answers,
-    result,
-    roleCounts,
-    timestamp
-  };
-  surveyData.responses.push(submission);
-  await writeJSON('survey_data.json', surveyData);
-  
-  res.json({ ok: true, player: player });
 });
 
 app.get('/api/survey/results', async (req,res)=>{
