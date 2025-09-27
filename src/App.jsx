@@ -11,11 +11,17 @@ export default function App(){
   const nav = useNavigate()
   const location = useLocation()
   
+  // Allow access to admin routes and survey routes without player
+  const adminRoutes = ['/survey-admin', '/gm', '/survey']
+  const isAdminRoute = adminRoutes.some(route => location.pathname.startsWith(route))
+  
   useEffect(()=>{
-    if(!player) nav('/')
-  },[])
+    if(!player && !isAdminRoute) {
+      nav('/')
+    }
+  },[player, isAdminRoute, nav])
 
-  // Render survey page without any other elements (only for survey routes)
+  // Render survey page without any other elements (only for survey routes, not admin)
   if (location.pathname === '/survey' || (REDIRECT_HOME_TO_SURVEY && location.pathname === '/')) {
     return (
       <div className="min-h-dvh">
