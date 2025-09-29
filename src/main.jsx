@@ -6,16 +6,48 @@ import App from './App'
 import Register from './pages/Register'
 import Lobby from './pages/Lobby'
 import NFCTag from './pages/NFCTag'
+import Home from './pages/Home'
 import Admin from './pages/Admin'
 import Kill from './pages/Kill'
 import Survey from './pages/Survey'
 import SurveyAdmin from './pages/SurveyAdmin'
+import Profile from './pages/Profile'
+import Invite from './pages/Invite'
+import AuthWrapper from './components/AuthWrapper'
 
 const router = createBrowserRouter([
-  { path: '/', element: <App/>,
+  { 
+    path: '/', 
+    element: (
+      <AuthWrapper>
+        {({ player, signOut }) => <App signOut={signOut} />}
+      </AuthWrapper>
+    ),
     children: [
-      { index:true, element: <Survey/> },
+      { index: true, element: <Home/> },
       { path: 'register', element: <Register/> },
+      { path: 'profile', element: <Profile/> },
+      { path: 'invite', element: <Invite/> },
+      { path: 'lobby', element: <Lobby/> },
+      { path: 'nfc/:id', element: <NFCTag/> },
+      { path: 'gm', element: <Admin/> },
+      { path: 'kill', element: <Kill/> },
+      { path: 'survey', element: <Survey/> },
+      { path: 'survey-admin', element: <SurveyAdmin/> },
+    ]
+  },
+  {
+    path: '/:name',
+    element: (
+      <AuthWrapper>
+        {({ player, signOut }) => <App signOut={signOut} />}
+      </AuthWrapper>
+    ),
+    children: [
+      { index: true, element: <Home/> },
+      { path: 'register', element: <Register/> },
+      { path: 'profile', element: <Profile/> },
+      { path: 'invite', element: <Invite/> },
       { path: 'lobby', element: <Lobby/> },
       { path: 'nfc/:id', element: <NFCTag/> },
       { path: 'gm', element: <Admin/> },

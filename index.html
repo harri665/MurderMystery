@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>🏢 Blackwood Corporate Tower - Investigation System</title>
     <meta name="description" content="Corporate murder mystery investigation at Blackwood Tower. Access restricted to authorized personnel only.">
   </head>
-  <body class="bg-neutral-950">
-    <div id="root"></div>
+  <body class="bg-neutral-950" style="margin: 0; padding: 0; overflow: hidden; height: 100vh; height: 100dvh; width: 100vw; position: fixed; overscroll-behavior: none; -webkit-overflow-scrolling: touch;">
+    <div id="root" style="height: 100%; width: 100%; overflow: hidden;"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

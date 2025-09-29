@@ -7,6 +7,9 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { Server as IOServer } from 'socket.io';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,7 +101,103 @@ io.on('connection', (socket) => {
   });
 });
 
+// ----- JWT Auth Middleware -----
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error('Token verification error:', error.message);
+    return res.status(403).json({ error: 'Invalid or expired token' });
+  }
+};
+
 // ----- API routes -----
+
+// Auth endpoints
+app.post('/api/auth/signin', async (req, res) => {
+  try {
+    const { name } = req.body || {};
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'First name is required' });
+    }
+
+    const searchName = name.toLowerCase().trim();
+
+    // Find player by first name (case-insensitive)
+    // Check if the search name matches the beginning of any player's full name
+    const player = players.players.find(p => {
+      const playerFirstName = p.name.split(' ')[0].toLowerCase().trim();
+      return playerFirstName === searchName;
+    });
+
+    if (!player) {
+      return res.status(404).json({ error: 'First name not found. Please register first or check your first name.' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { 
+        playerId: player.id, 
+        name: player.name,
+        roleId: player.roleId 
+      }, 
+      JWT_SECRET, 
+      { expiresIn: '7d' }
+    );
+
+    res.json({ 
+      token, 
+      player: {
+        id: player.id,
+        name: player.name,
+        roleId: player.roleId,
+        isKiller: player.isKiller,
+        isDetective: player.isDetective,
+        surveyResult: player.surveyResult,
+        surveyCompleted: player.surveyCompleted
+      }
+    });
+  } catch (error) {
+    console.error('Sign in error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/auth/verify', authenticateToken, async (req, res) => {
+  try {
+    // Find current player data
+    const player = players.players.find(p => p.id === req.user.playerId);
+    
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
+
+    res.json({ 
+      player: {
+        id: player.id,
+        name: player.name,
+        roleId: player.roleId,
+        isKiller: player.isKiller,
+        isDetective: player.isDetective,
+        surveyResult: player.surveyResult,
+        surveyCompleted: player.surveyCompleted
+      }
+    });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 app.get('/api/game', async (req,res)=>{
   res.json({
     phase: game.phase,
