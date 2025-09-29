@@ -2,12 +2,45 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_BASE;
 
 export default function Invite() {
   const player = usePlayer();
+  const [characters, setCharacters] = useState([]);
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const response = await axios.get(`${API}/api/characters`);
+        setCharacters(response.data);
+      } catch (error) {
+        console.error('Failed to fetch characters:', error);
+      }
+    };
+    fetchCharacters();
+  }, []);
 
   const character = useMemo(() => {
     const name = player?.name || 'Guest';
+
+    // If player has an assigned character, use it
+    if (player?.characterId) {
+      const assignedCharacter = characters.find(c => c.id === player.characterId);
+      if (assignedCharacter) {
+        return {
+          name: assignedCharacter.name,
+          role: player?.role || 'Employee',
+          avatar: player?.avatar || null,
+          goals: assignedCharacter.goals || [],
+          flaws: assignedCharacter.flaws || [],
+          backstory: assignedCharacter.backstory || ''
+        };
+      }
+    }
+
+    // Fallback to default character data
     return {
       name,
       role: player?.role || 'Employee',
@@ -19,14 +52,14 @@ export default function Invite() {
       ],
       flaws: player?.flaws || [
         'Terrible with directions',
-        'Can’t resist starting rumors'
+        'Can\'t resist starting rumors'
       ],
       backstory:
         player?.backstory ||
         `${name} joined Blackwood Tower last year. Known for quick instincts and a knack for reading rooms, ` +
-        `they’ve made as many friends as skeptics. Tonight’s dinner could make — or break — their reputation.`
+        `they've made as many friends as skeptics. Tonight's dinner could make — or break — their reputation.`
     };
-  }, [player]);
+  }, [player, characters]);
 
   // phases: sealed -> peek -> details
   const [phase, setPhase] = useState('sealed');

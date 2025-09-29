@@ -184,7 +184,8 @@
         }
       },
       "surveyResult": "coordinator",
-      "surveyCompleted": true
+      "surveyCompleted": true,
+      "characterId": "1e69aeaf-b8d9-402b-93a6-2cb4244291cd"
     }
   ]
 }

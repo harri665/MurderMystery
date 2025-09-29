@@ -78,6 +78,7 @@ let messages = await readJSON('messages.json', { messages: [] });
 let contacts = await readJSON('contacts.json', { submissions: [] });
 let nfcCards = await readJSON('nfc_cards.json', { cards: [] });
 let surveyData = await readJSON('survey_data.json', { responses: [] });
+let characters = await readJSON('characters.json', []);
 
 // quick index
 const playersById = () => Object.fromEntries(players.players.map(p=>[p.id,p]));
@@ -160,6 +161,7 @@ app.post('/api/auth/signin', async (req, res) => {
         id: player.id,
         name: player.name,
         roleId: player.roleId,
+        characterId: player.characterId,
         isKiller: player.isKiller,
         isDetective: player.isDetective,
         surveyResult: player.surveyResult,
@@ -186,6 +188,7 @@ app.get('/api/auth/verify', authenticateToken, async (req, res) => {
         id: player.id,
         name: player.name,
         roleId: player.roleId,
+        characterId: player.characterId,
         isKiller: player.isKiller,
         isDetective: player.isDetective,
         surveyResult: player.surveyResult,
@@ -231,6 +234,7 @@ app.post('/api/register', async (req,res)=>{
   const p = {
     id, name,
     roleId: role,
+    characterId: null,
     isKiller: false, isDetective: false,
     lastKillAt: 0,
     downUntil: 0,
@@ -268,6 +272,7 @@ app.post('/api/survey/submit', async (req,res)=>{
       id: playerId,
       name: name.trim(),
       roleId: result, // Use survey result as roleId
+      characterId: null,
       isKiller: false,
       isDetective: false,
       lastKillAt: 0,
@@ -331,6 +336,33 @@ app.get('/api/survey/results', async (req,res)=>{
 app.post('/api/survey/clear', async (req,res)=>{
   surveyData.responses = [];
   await writeJSON('survey_data.json', surveyData);
+  res.json({ ok: true });
+});
+
+// Character endpoints
+app.get('/api/characters', async (req,res)=>{
+  res.json(characters);
+});
+
+app.post('/api/characters', async (req,res)=>{
+  const { name, goals, flaws, backstory } = req.body || {};
+  if(!name) return res.status(400).json({error:"name required"});
+  const id = crypto.randomUUID();
+  const char = { id, name, goals: goals || [], flaws: flaws || [], backstory: backstory || '' };
+  characters.push(char);
+  await writeJSON('characters.json', characters);
+  res.json({ character: char });
+});
+
+app.post('/api/players/:playerId/assign-character', async (req,res)=>{
+  const { playerId } = req.params;
+  const { characterId } = req.body || {};
+  const player = players.players.find(p => p.id === playerId);
+  if(!player) return res.status(404).json({error:"player not found"});
+  const char = characters.find(c => c.id === characterId);
+  if(!char) return res.status(404).json({error:"character not found"});
+  player.characterId = characterId;
+  await writeJSON('players.json', players);
   res.json({ ok: true });
 });
 
