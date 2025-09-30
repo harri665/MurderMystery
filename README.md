@@ -13,9 +13,9 @@ npm start
 ```
 
 This will:
-- Start the backend server on `localhost:3001`
+- Start the backend server on `localhost:8080`
 - Start the frontend dev server on `localhost:5173`
-- Use `localhost:3001` for API calls
+- Use `localhost:8080` for API calls
 
 ### Backend Only in Docker (Alternative)
 If you want to run only the backend in Docker for development:
@@ -41,7 +41,7 @@ This will:
 
 ### Environment Configuration
 
-- **Development**: Uses `.env.development` with `localhost:3001` API
+- **Development**: Uses `.env.development` with `localhost:8080` API
 - **Production**: Uses `.env.production` with `https://mysteryapi.harrison-martin.com` API
 
 ## Domain Configuration
@@ -56,7 +56,7 @@ Make sure your reverse proxy (nginx, Traefik, etc.) or DNS is configured to poin
 
 Key environment variables:
 - `VITE_API_BASE`: API endpoint URL
-- `PORT`: Server port (default: 3001)
+- `PORT`: Server port (default: 8080)
 - `ORIGIN`: Allowed CORS origins
 - `NODE_ENV`: Environment mode
 

@@ -16,6 +16,8 @@ export default function Admin(){
   const [newCharFlaws,setNewCharFlaws] = useState('')
   const [newCharBackstory,setNewCharBackstory] = useState('')
   const [newCharAvatar,setNewCharAvatar] = useState('')
+  const [newCharIsKiller,setNewCharIsKiller] = useState(false)
+  const [newCharIsDetective,setNewCharIsDetective] = useState(false)
   const [assignPlayerId,setAssignPlayerId] = useState('')
   const [assignCharId,setAssignCharId] = useState('')
 
@@ -43,9 +45,18 @@ export default function Admin(){
   async function createCharacter(){
     const goals = newCharGoals.split(',').map(g=>g.trim()).filter(Boolean)
     const flaws = newCharFlaws.split(',').map(f=>f.trim()).filter(Boolean)
-    await axios.post(`${API}/api/characters`, { name: newCharName, goals, flaws, backstory: newCharBackstory, avatar: newCharAvatar || null })
+    await axios.post(`${API}/api/characters`, { 
+      name: newCharName, 
+      goals, 
+      flaws, 
+      backstory: newCharBackstory, 
+      avatar: newCharAvatar || null,
+      isKiller: newCharIsKiller,
+      isDetective: newCharIsDetective
+    })
     const c = await axios.get(`${API}/api/characters`); setCharacters(c.data)
     setNewCharName(''); setNewCharGoals(''); setNewCharFlaws(''); setNewCharBackstory(''); setNewCharAvatar('')
+    setNewCharIsKiller(false); setNewCharIsDetective(false)
   }
 
   async function assignCharacter(){
@@ -119,6 +130,26 @@ export default function Admin(){
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharGoals} onChange={e=>setNewCharGoals(e.target.value)} placeholder="Goals (comma separated)" />
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharFlaws} onChange={e=>setNewCharFlaws(e.target.value)} placeholder="Flaws (comma separated)" />
           <textarea className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharBackstory} onChange={e=>setNewCharBackstory(e.target.value)} placeholder="Backstory" rows="3"></textarea>
+          <div className="flex gap-4 mb-2">
+            <label className="flex items-center gap-2">
+              <input 
+                type="checkbox" 
+                checked={newCharIsKiller} 
+                onChange={e=>setNewCharIsKiller(e.target.checked)}
+                className="rounded border-neutral-700"
+              />
+              <span className="text-red-400 font-semibold">Killer</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input 
+                type="checkbox" 
+                checked={newCharIsDetective} 
+                onChange={e=>setNewCharIsDetective(e.target.checked)}
+                className="rounded border-neutral-700"
+              />
+              <span className="text-blue-400 font-semibold">Detective</span>
+            </label>
+          </div>
           <button onClick={createCharacter} className="btn w-full">Create Character</button>
         </div>
         <div>
@@ -140,7 +171,11 @@ export default function Admin(){
         <ul className="text-sm space-y-2">
           {characters.map(c=>(
             <li key={c.id} className="border-b border-neutral-700 pb-2">
-              <b>{c.name}</b>
+              <div className="flex items-center gap-2 mb-1">
+                <b>{c.name}</b>
+                {c.isKiller && <span className="text-red-400 font-semibold">KILLER</span>}
+                {c.isDetective && <span className="text-blue-400 font-semibold">DETECTIVE</span>}
+              </div>
               <div>Goals: {c.goals.join(', ')}</div>
               <div>Flaws: {c.flaws.join(', ')}</div>
               <div>Backstory: {c.backstory}</div>

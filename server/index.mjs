@@ -345,10 +345,19 @@ app.get('/api/characters', async (req,res)=>{
 });
 
 app.post('/api/characters', async (req,res)=>{
-  const { name, goals, flaws, backstory, avatar } = req.body || {};
+  const { name, goals, flaws, backstory, avatar, isKiller, isDetective } = req.body || {};
   if(!name) return res.status(400).json({error:"name required"});
   const id = crypto.randomUUID();
-  const char = { id, name, goals: goals || [], flaws: flaws || [], backstory: backstory || '', avatar: avatar || null };
+  const char = { 
+    id, 
+    name, 
+    goals: goals || [], 
+    flaws: flaws || [], 
+    backstory: backstory || '', 
+    avatar: avatar || null,
+    isKiller: isKiller || false,
+    isDetective: isDetective || false
+  };
   characters.push(char);
   await writeJSON('characters.json', characters);
   res.json({ character: char });
@@ -362,6 +371,8 @@ app.post('/api/players/:playerId/assign-character', async (req,res)=>{
   const char = characters.find(c => c.id === characterId);
   if(!char) return res.status(404).json({error:"character not found"});
   player.characterId = characterId;
+  player.isKiller = char.isKiller || false;
+  player.isDetective = char.isDetective || false;
   await writeJSON('players.json', players);
   res.json({ ok: true });
 });

@@ -86,6 +86,36 @@ export default function Profile() {
           <div className="w-16"></div> {/* Spacer for centering */}
         </div>
 
+        {/* Role Status */}
+        {player && (
+          <div className="mb-6 text-center">
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
+              player.isKiller 
+                ? 'bg-red-600/20 text-red-300 border border-red-500/30'
+                : player.isDetective 
+                ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30'
+                : 'bg-green-600/20 text-green-300 border border-green-500/30'
+            }`}>
+              {player.isKiller ? (
+                <>
+                  <span>🔪</span>
+                  <span>You are the killer</span>
+                </>
+              ) : player.isDetective ? (
+                <>
+                  <span>🕵️</span>
+                  <span>You are the detective</span>
+                </>
+              ) : (
+                <>
+                  <span>✅</span>
+                  <span>You are not the killer</span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
         {player ? (
           <div className="space-y-6">
             {/* Character Profile Card */}

@@ -8,7 +8,7 @@ axios.defaults.headers.common['Content-Type'] = 'application/json'
 // —————————————————————————————————————————————
 // Config
 // —————————————————————————————————————————————
-const API = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
+const API = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
 const BRAND = {
   primary: 'blue', // Tailwind color key for the primary brand tone
 }

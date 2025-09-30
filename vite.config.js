@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
     define: {
       // Make environment variables available at build time
       'import.meta.env.VITE_API_BASE': JSON.stringify(
-        mode === 'development' ? 'http://localhost:3001' : env.VITE_API_BASE
+        mode === 'development' ? 'http://localhost:8080' : env.VITE_API_BASE
       )
     }
   }

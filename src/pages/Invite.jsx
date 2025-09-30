@@ -208,12 +208,19 @@ function Envelope({ phase, onPrimaryClick, onLetterClick }) {
 
             {/* Wax seal (hidden after opening) */}
             <motion.div
-              className="absolute left-1/2 top-[52%] -translate-x-1/2 z-30 rounded-full h-12 w-12 bg-red-700 ring-4 ring-red-900/60 shadow-lg grid place-items-center"
+              className="absolute left-1/2 top-[52%] -translate-x-1/2 z-30 rounded-full h-20 w-20 overflow-hidden"
               initial={false}
               animate={{ scale: isSealed ? 1 : 0, opacity: isSealed ? 1 : 0 }}
               transition={{ duration: 0.22 }}
             >
-              <span className="text-xs">BT</span>
+              <img
+                src="/images/seal.png"
+                alt="Seal"
+                className="w-full h-full object-cover rounded-full"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">BT</span>
+              </div>
             </motion.div>
 
             {/* TOP FLAP (opens on first tap) */}
@@ -242,6 +249,7 @@ function Envelope({ phase, onPrimaryClick, onLetterClick }) {
 /* ========================= */
 function ProfileDetails({ character }) {
   const initials = initialsFromName(character.name);
+  const player = usePlayer();
 
   return (
     <div className="space-y-6">
@@ -272,6 +280,36 @@ function ProfileDetails({ character }) {
           </div>
         </div>
       </div>
+
+      {/* Role Status */}
+      {player && (
+        <div className="text-center">
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
+            player.isKiller 
+              ? 'bg-red-600/20 text-red-300 border border-red-500/30'
+              : player.isDetective 
+              ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30'
+              : 'bg-green-600/20 text-green-300 border border-green-500/30'
+          }`}>
+            {player.isKiller ? (
+              <>
+                <span>🔪</span>
+                <span>You are the killer</span>
+              </>
+            ) : player.isDetective ? (
+              <>
+                <span>🕵️</span>
+                <span>You are the detective</span>
+              </>
+            ) : (
+              <>
+                <span>✅</span>
+                <span>You are not the killer</span>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <SectionCard title="Goals">
