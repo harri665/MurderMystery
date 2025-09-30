@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import SignIn from './SignIn';
 import IPhoneFrame from './IPhoneFrame';
 
@@ -12,8 +12,10 @@ export default function AuthWrapper({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [redirectPath, setRedirectPath] = useState(null);
   const { name: urlName } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Verify JWT token
   const verifyToken = async (token) => {
@@ -54,9 +56,15 @@ export default function AuthWrapper({ children }) {
         localStorage.setItem('login_timestamp', Date.now().toString());
         setPlayer(data.player);
         setIsAuthenticated(true);
+
+        // Clean URL - remove the name parameter but keep nested path
+        // e.g. /harrison/invite -> /invite
+        const currentPath = location.pathname;
+        const match = currentPath.match(/^\/[\w-]+(\/.*)?$/);
+        const targetPath = (match && match[1]) ? match[1] : '/';
         
-        // Clean URL - remove the name parameter
-        navigate('/', { replace: true });
+        // Set redirect path for later navigation
+        setRedirectPath(targetPath);
         return true;
       }
     } catch (error) {
@@ -165,6 +173,14 @@ export default function AuthWrapper({ children }) {
       clearInterval(tokenCheckInterval);
     };
   }, [urlName, navigate]);
+
+  // Handle redirect after authentication
+  useEffect(() => {
+    if (redirectPath && isAuthenticated) {
+      navigate(redirectPath, { replace: true });
+      setRedirectPath(null);
+    }
+  }, [redirectPath, isAuthenticated, navigate]);
 
   const handleSignIn = (playerData, token) => {
     setPlayer(playerData);

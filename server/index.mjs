@@ -345,10 +345,10 @@ app.get('/api/characters', async (req,res)=>{
 });
 
 app.post('/api/characters', async (req,res)=>{
-  const { name, goals, flaws, backstory } = req.body || {};
+  const { name, goals, flaws, backstory, avatar } = req.body || {};
   if(!name) return res.status(400).json({error:"name required"});
   const id = crypto.randomUUID();
-  const char = { id, name, goals: goals || [], flaws: flaws || [], backstory: backstory || '' };
+  const char = { id, name, goals: goals || [], flaws: flaws || [], backstory: backstory || '', avatar: avatar || null };
   characters.push(char);
   await writeJSON('characters.json', characters);
   res.json({ character: char });

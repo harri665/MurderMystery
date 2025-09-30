@@ -15,6 +15,7 @@ export default function Admin(){
   const [newCharGoals,setNewCharGoals] = useState('')
   const [newCharFlaws,setNewCharFlaws] = useState('')
   const [newCharBackstory,setNewCharBackstory] = useState('')
+  const [newCharAvatar,setNewCharAvatar] = useState('')
   const [assignPlayerId,setAssignPlayerId] = useState('')
   const [assignCharId,setAssignCharId] = useState('')
 
@@ -42,9 +43,9 @@ export default function Admin(){
   async function createCharacter(){
     const goals = newCharGoals.split(',').map(g=>g.trim()).filter(Boolean)
     const flaws = newCharFlaws.split(',').map(f=>f.trim()).filter(Boolean)
-    await axios.post(`${API}/api/characters`, { name: newCharName, goals, flaws, backstory: newCharBackstory })
+    await axios.post(`${API}/api/characters`, { name: newCharName, goals, flaws, backstory: newCharBackstory, avatar: newCharAvatar || null })
     const c = await axios.get(`${API}/api/characters`); setCharacters(c.data)
-    setNewCharName(''); setNewCharGoals(''); setNewCharFlaws(''); setNewCharBackstory('')
+    setNewCharName(''); setNewCharGoals(''); setNewCharFlaws(''); setNewCharBackstory(''); setNewCharAvatar('')
   }
 
   async function assignCharacter(){
@@ -114,6 +115,7 @@ export default function Admin(){
         <div>
           <h4 className="font-semibold">Create Character</h4>
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharName} onChange={e=>setNewCharName(e.target.value)} placeholder="Character Name" />
+          <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharAvatar} onChange={e=>setNewCharAvatar(e.target.value)} placeholder="Avatar URL (optional)" />
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharGoals} onChange={e=>setNewCharGoals(e.target.value)} placeholder="Goals (comma separated)" />
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharFlaws} onChange={e=>setNewCharFlaws(e.target.value)} placeholder="Flaws (comma separated)" />
           <textarea className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharBackstory} onChange={e=>setNewCharBackstory(e.target.value)} placeholder="Backstory" rows="3"></textarea>

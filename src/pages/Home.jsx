@@ -61,17 +61,17 @@ function HomeScreen({ signOut }) {
   
   const apps = useMemo(
     () => [
-      { title: "Messages", to: "/messages", emoji: "💬", gradient: "from-green-400 to-green-600" },
-      { title: "Calendar", to: "/calendar", emoji: "📅", gradient: "from-red-300 to-rose-600" },
-      { title: "Photos", to: "/photos", emoji: "📸", gradient: "from-yellow-300 to-amber-500" },
-      { title: "Camera", to: "/camera", emoji: "📷", gradient: "from-stone-300 to-stone-500" },
-      { title: "YouTube", to: "/youtube", emoji: "▶️", gradient: "from-rose-400 to-rose-600" },
-      { title: "Maps", to: "/maps", emoji: "🗺️", gradient: "from-sky-300 to-sky-600" },
-      { title: "Notes", to: "/notes", emoji: "📝", gradient: "from-amber-300 to-amber-600" },
+      // { title: "Messages", to: "/messages", emoji: "💬", gradient: "from-green-400 to-green-600" },
+      // { title: "Calendar", to: "/calendar", emoji: "📅", gradient: "from-red-300 to-rose-600" },
+      // { title: "Photos", to: "/photos", emoji: "📸", gradient: "from-yellow-300 to-amber-500" },
+      // { title: "Camera", to: "/camera", emoji: "📷", gradient: "from-stone-300 to-stone-500" },
+      // { title: "YouTube", to: "/youtube", emoji: "▶️", gradient: "from-rose-400 to-rose-600" },
+      // { title: "Maps", to: "/maps", emoji: "🗺️", gradient: "from-sky-300 to-sky-600" },
+      // { title: "Notes", to: "/notes", emoji: "📝", gradient: "from-amber-300 to-amber-600" },
       { title: "Profile", to: "/profile", emoji: "👤", gradient: "from-purple-400 to-purple-600" },
-      { title: "Reminders", to: "/reminders", emoji: "✅", gradient: "from-zinc-300 to-zinc-600" },
-      { title: "Invite", to: "/invite", emoji: "�", gradient: "from-emerald-400 to-emerald-600" },
-      { title: "Settings", to: "/settings", emoji: "⚙️", gradient: "from-neutral-400 to-neutral-700" },
+      // { title: "Reminders", to: "/reminders", emoji: "✅", gradient: "from-zinc-300 to-zinc-600" },
+      { title: "Invite", to: "/invite", emoji: "📨", gradient: "from-emerald-400 to-emerald-600" },
+      // { title: "Settings", to: "/settings", emoji: "⚙️", gradient: "from-neutral-400 to-neutral-700" },
       { title: "Logout", to: "#", emoji: "🚪", gradient: "from-red-400 to-red-600", isLogout: true },
     ],
     []

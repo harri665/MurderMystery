@@ -251,7 +251,19 @@ function ProfileDetails({ character }) {
             {character.avatar ? (
               <img src={character.avatar} alt={character.name} className="h-full w-full object-cover" />
             ) : (
-              <span className="text-2xl font-semibold">{initials}</span>
+              <div className="flex items-center justify-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-10 h-10 text-white/80"
+                  fill="currentColor"
+                >
+                  {/* Detective/Mystery themed icon - silhouette with fedora */}
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H9L3 7V9H1V21H23V9H21ZM19 19H5V11H19V19ZM9 13H11V15H9V13ZM13 13H15V15H13V13Z"/>
+                  {/* Add a magnifying glass overlay for mystery theme */}
+                  <circle cx="18" cy="6" r="3" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.6"/>
+                  <path d="M20 4L21.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.6"/>
+                </svg>
+              </div>
             )}
           </div>
           <div>

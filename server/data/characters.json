@@ -9,5 +9,17 @@
       "test"
     ],
     "backstory": "test"
+  },
+  {
+    "id": "761d2f4a-388a-4101-9fb7-17063963a933",
+    "name": "test2",
+    "goals": [
+      "test2"
+    ],
+    "flaws": [
+      "test2"
+    ],
+    "backstory": "test2",
+    "avatar": "test2"
   }
 ]
