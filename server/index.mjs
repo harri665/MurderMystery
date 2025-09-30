@@ -363,6 +363,15 @@ app.post('/api/characters', async (req,res)=>{
   res.json({ character: char });
 });
 
+app.delete('/api/characters/:characterId', async (req,res)=>{
+  const { characterId } = req.params;
+  const index = characters.findIndex(c => c.id === characterId);
+  if(index === -1) return res.status(404).json({error:"character not found"});
+  characters.splice(index, 1);
+  await writeJSON('characters.json', characters);
+  res.json({ ok: true });
+});
+
 app.post('/api/players/:playerId/assign-character', async (req,res)=>{
   const { playerId } = req.params;
   const { characterId } = req.body || {};
@@ -373,6 +382,15 @@ app.post('/api/players/:playerId/assign-character', async (req,res)=>{
   player.characterId = characterId;
   player.isKiller = char.isKiller || false;
   player.isDetective = char.isDetective || false;
+  await writeJSON('players.json', players);
+  res.json({ ok: true });
+});
+
+app.delete('/api/players/:playerId', async (req,res)=>{
+  const { playerId } = req.params;
+  const index = players.players.findIndex(p => p.id === playerId);
+  if(index === -1) return res.status(404).json({error:"player not found"});
+  players.players.splice(index, 1);
   await writeJSON('players.json', players);
   res.json({ ok: true });
 });
