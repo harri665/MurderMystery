@@ -20,6 +20,10 @@ export default function Admin(){
   const [newCharIsDetective,setNewCharIsDetective] = useState(false)
   const [assignPlayerId,setAssignPlayerId] = useState('')
   const [assignCharId,setAssignCharId] = useState('')
+  const [newPlayerName,setNewPlayerName] = useState('')
+  const [newPlayerRole,setNewPlayerRole] = useState('')
+  const [removePlayerId,setRemovePlayerId] = useState('')
+  const [removeCharacterId,setRemoveCharacterId] = useState('')
 
   useEffect(()=>{
     (async()=>{
@@ -63,6 +67,29 @@ export default function Admin(){
     await axios.post(`${API}/api/players/${assignPlayerId}/assign-character`, { characterId: assignCharId })
     const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
     setAssignPlayerId(''); setAssignCharId('')
+  }
+
+  async function createPlayer(){
+    await axios.post(`${API}/api/players`, { 
+      name: newPlayerName, 
+      role: newPlayerRole || null
+    })
+    const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
+    setNewPlayerName(''); setNewPlayerRole('')
+  }
+
+  async function removePlayer(){
+    if (!removePlayerId) return
+    await axios.delete(`${API}/api/players/${removePlayerId}`)
+    const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
+    setRemovePlayerId('')
+  }
+
+  async function removeCharacter(){
+    if (!removeCharacterId) return
+    await axios.delete(`${API}/api/characters/${removeCharacterId}`)
+    const c = await axios.get(`${API}/api/characters`); setCharacters(c.data)
+    setRemoveCharacterId('')
   }
 
   return (
@@ -122,7 +149,21 @@ export default function Admin(){
         </div>
       </div>
 
-      <div className="card grid md:grid-cols-2 gap-3">
+      <div className="card grid md:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div>
+          <h4 className="font-semibold">Create Player</h4>
+          <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newPlayerName} onChange={e=>setNewPlayerName(e.target.value)} placeholder="Player Name" />
+          <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newPlayerRole} onChange={e=>setNewPlayerRole(e.target.value)} placeholder="Role (optional)" />
+          <button onClick={createPlayer} className="btn w-full">Create Player</button>
+        </div>
+        <div>
+          <h4 className="font-semibold">Remove Player</h4>
+          <select className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={removePlayerId} onChange={e=>setRemovePlayerId(e.target.value)}>
+            <option value="">Select Player to Remove</option>
+            {players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+          <button onClick={removePlayer} className="btn w-full bg-red-600 hover:bg-red-700">Remove Player</button>
+        </div>
         <div>
           <h4 className="font-semibold">Create Character</h4>
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newCharName} onChange={e=>setNewCharName(e.target.value)} placeholder="Character Name" />
@@ -151,6 +192,14 @@ export default function Admin(){
             </label>
           </div>
           <button onClick={createCharacter} className="btn w-full">Create Character</button>
+        </div>
+        <div>
+          <h4 className="font-semibold">Remove Character</h4>
+          <select className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={removeCharacterId} onChange={e=>setRemoveCharacterId(e.target.value)}>
+            <option value="">Select Character to Remove</option>
+            {characters.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+          </select>
+          <button onClick={removeCharacter} className="btn w-full bg-red-600 hover:bg-red-700">Remove Character</button>
         </div>
         <div>
           <h4 className="font-semibold">Assign Character to Player</h4>
