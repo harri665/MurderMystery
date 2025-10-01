@@ -226,6 +226,25 @@ app.get('/api/players', async (req,res)=>{
   res.json(players);
 });
 
+app.post('/api/players', async (req,res)=>{
+  const { name, role } = req.body || {};
+  if(!name) return res.status(400).json({error:"name required"});
+  const roleId = (players.players.find(p=>p.roleId===role) && role) ? role : null;
+  const id = crypto.randomUUID();
+  const p = {
+    id, name,
+    roleId: roleId,
+    characterId: null,
+    isKiller: false, isDetective: false,
+    lastKillAt: 0,
+    downUntil: 0,
+    abilities: { unpoisonLastAt: 0, revives: { ACT_I:0, ACT_II:0, ACT_III:0 } }
+  };
+  players.players.push(p);
+  await writeJSON('players.json', players);
+  res.json({ player: p });
+});
+
 app.post('/api/register', async (req,res)=>{
   const { name, roleId } = req.body || {};
   if(!name) return res.status(400).json({error:"name required"});
@@ -380,10 +399,28 @@ app.post('/api/players/:playerId/assign-character', async (req,res)=>{
   const char = characters.find(c => c.id === characterId);
   if(!char) return res.status(404).json({error:"character not found"});
   player.characterId = characterId;
-  player.isKiller = char.isKiller || false;
-  player.isDetective = char.isDetective || false;
+  // Note: Player roles (isKiller, isDetective) are now independent of characters
   await writeJSON('players.json', players);
   res.json({ ok: true });
+});
+
+app.post('/api/players/:playerId/set-role', async (req,res)=>{
+  const { playerId } = req.params;
+  const { isKiller, isDetective } = req.body || {};
+  const player = players.players.find(p => p.id === playerId);
+  if(!player) return res.status(404).json({error:"player not found"});
+  
+  // Set player role - if both are false, they're a citizen
+  player.isKiller = Boolean(isKiller);
+  player.isDetective = Boolean(isDetective);
+  
+  // Ensure only one role is active (killer takes precedence if both are set)
+  if (player.isKiller && player.isDetective) {
+    player.isDetective = false;
+  }
+  
+  await writeJSON('players.json', players);
+  res.json({ ok: true, player });
 });
 
 app.delete('/api/players/:playerId', async (req,res)=>{

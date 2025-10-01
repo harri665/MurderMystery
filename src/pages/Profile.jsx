@@ -109,7 +109,7 @@ export default function Profile() {
               ) : (
                 <>
                   <span>✅</span>
-                  <span>You are not the killer</span>
+                  <span>You are a civilian</span>
                 </>
               )}
             </div>

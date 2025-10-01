@@ -24,6 +24,8 @@ export default function Admin(){
   const [newPlayerRole,setNewPlayerRole] = useState('')
   const [removePlayerId,setRemovePlayerId] = useState('')
   const [removeCharacterId,setRemoveCharacterId] = useState('')
+  const [setRolePlayerId,setSetRolePlayerId] = useState('')
+  const [setRoleType,setSetRoleType] = useState('')
 
   useEffect(()=>{
     (async()=>{
@@ -92,6 +94,15 @@ export default function Admin(){
     setRemoveCharacterId('')
   }
 
+  async function setPlayerRole(){
+    if (!setRolePlayerId || !setRoleType) return
+    const isKiller = setRoleType === 'killer'
+    const isDetective = setRoleType === 'detective'
+    await axios.post(`${API}/api/players/${setRolePlayerId}/set-role`, { isKiller, isDetective })
+    const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
+    setSetRolePlayerId(''); setSetRoleType('')
+  }
+
   return (
     <div className="grid gap-4">
       <div className="card">
@@ -149,7 +160,7 @@ export default function Admin(){
         </div>
       </div>
 
-      <div className="card grid md:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="card grid md:grid-cols-2 lg:grid-cols-6 gap-3">
         <div>
           <h4 className="font-semibold">Create Player</h4>
           <input className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={newPlayerName} onChange={e=>setNewPlayerName(e.target.value)} placeholder="Player Name" />
@@ -163,6 +174,20 @@ export default function Admin(){
             {players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           <button onClick={removePlayer} className="btn w-full bg-red-600 hover:bg-red-700">Remove Player</button>
+        </div>
+        <div>
+          <h4 className="font-semibold">Set Player Role</h4>
+          <select className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={setRolePlayerId} onChange={e=>setSetRolePlayerId(e.target.value)}>
+            <option value="">Select Player</option>
+            {players.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+          <select className="w-full p-2 rounded bg-neutral-800 border border-neutral-700 mb-2" value={setRoleType} onChange={e=>setSetRoleType(e.target.value)}>
+            <option value="">Select Role</option>
+            <option value="citizen">Citizen</option>
+            <option value="detective">Detective</option>
+            <option value="killer">Killer</option>
+          </select>
+          <button onClick={setPlayerRole} className="btn w-full">Set Role</button>
         </div>
         <div>
           <h4 className="font-semibold">Create Character</h4>

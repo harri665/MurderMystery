@@ -1,3 +1,34 @@
 {
-  "players": []
+  "players": [
+    {
+      "id": "harrison",
+      "name": "harrison martin",
+      "roleId": "killerA",
+      "isKiller": true,
+      "isDetective": false,
+      "fields": {
+        "codename": "Pallas",
+        "hometown": "Tempe",
+        "drink": "cortado"
+      }
+    },
+    {
+      "id": "0f52cbc2-22b8-49de-8bb0-bbe44914c4a3",
+      "name": "Andrew Widner",
+      "roleId": null,
+      "characterId": null,
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      }
+    }
+  ]
 }
