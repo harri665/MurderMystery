@@ -27,6 +27,20 @@ export default function Admin(){
   const [setRolePlayerId,setSetRolePlayerId] = useState('')
   const [setRoleType,setSetRoleType] = useState('')
 
+  // JSON Editor state
+  const [jsonFiles, setJsonFiles] = useState({
+    game: '',
+    players: '',
+    characters: '',
+    messages: '',
+    nfc_cards: '',
+    contacts: '',
+    survey_data: ''
+  })
+  const [activeJsonTab, setActiveJsonTab] = useState('game')
+  const [jsonLoading, setJsonLoading] = useState(false)
+  const [jsonSaving, setJsonSaving] = useState('')
+
   useEffect(()=>{
     (async()=>{
       const g = await axios.get(`${API}/api/game`); setGame(g.data)
@@ -101,6 +115,55 @@ export default function Admin(){
     await axios.post(`${API}/api/players/${setRolePlayerId}/set-role`, { isKiller, isDetective })
     const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
     setSetRolePlayerId(''); setSetRoleType('')
+  }
+
+  // JSON Editor functions
+  async function loadJsonFile(filename) {
+    try {
+      const response = await axios.get(`${API}/api/json/${filename}`)
+      setJsonFiles(prev => ({
+        ...prev,
+        [filename]: JSON.stringify(response.data, null, 2)
+      }))
+    } catch (error) {
+      console.error(`Error loading ${filename}.json:`, error)
+      alert(`Error loading ${filename}.json`)
+    }
+  }
+
+  async function saveJsonFile(filename) {
+    try {
+      setJsonSaving(filename)
+      const data = JSON.parse(jsonFiles[filename])
+      await axios.post(`${API}/api/json/${filename}`, data)
+      
+      // Refresh the relevant state if needed
+      if (filename === 'game') {
+        const g = await axios.get(`${API}/api/game`); setGame(g.data)
+      } else if (filename === 'players') {
+        const p = await axios.get(`${API}/api/players`); setPlayers(p.data.players)
+      } else if (filename === 'characters') {
+        const c = await axios.get(`${API}/api/characters`); setCharacters(c.data)
+      }
+      
+      alert(`${filename}.json saved successfully!`)
+    } catch (error) {
+      console.error(`Error saving ${filename}.json:`, error)
+      alert(`Error saving ${filename}.json: ${error.message}`)
+    } finally {
+      setJsonSaving('')
+    }
+  }
+
+  async function loadAllJsonFiles() {
+    setJsonLoading(true)
+    try {
+      await Promise.all(Object.keys(jsonFiles).map(filename => loadJsonFile(filename)))
+    } catch (error) {
+      console.error('Error loading JSON files:', error)
+    } finally {
+      setJsonLoading(false)
+    }
   }
 
   return (
@@ -256,6 +319,74 @@ export default function Admin(){
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* JSON Editor Section */}
+      <div className="card">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold">JSON File Editor</h3>
+          <button 
+            onClick={loadAllJsonFiles} 
+            disabled={jsonLoading}
+            className="btn btn-secondary"
+          >
+            {jsonLoading ? 'Loading...' : 'Load All JSON Files'}
+          </button>
+        </div>
+
+        {/* JSON File Tabs */}
+        <div className="flex flex-wrap gap-2 mb-4 border-b border-neutral-700 pb-2">
+          {Object.keys(jsonFiles).map(filename => (
+            <button
+              key={filename}
+              onClick={() => setActiveJsonTab(filename)}
+              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                activeJsonTab === filename
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-neutral-700 text-neutral-300 hover:bg-neutral-600'
+              }`}
+            >
+              {filename}.json
+            </button>
+          ))}
+        </div>
+
+        {/* JSON Editor */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium text-lg">{activeJsonTab}.json</h4>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => loadJsonFile(activeJsonTab)}
+                className="btn btn-secondary text-sm"
+              >
+                Reload
+              </button>
+              <button 
+                onClick={() => saveJsonFile(activeJsonTab)}
+                disabled={jsonSaving === activeJsonTab}
+                className="btn btn-primary text-sm"
+              >
+                {jsonSaving === activeJsonTab ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+
+          <textarea
+            value={jsonFiles[activeJsonTab]}
+            onChange={(e) => setJsonFiles(prev => ({
+              ...prev,
+              [activeJsonTab]: e.target.value
+            }))}
+            className="w-full h-96 p-4 rounded bg-neutral-900 border border-neutral-700 font-mono text-sm text-green-400"
+            placeholder={`JSON content for ${activeJsonTab}.json will appear here...`}
+            spellCheck={false}
+          />
+
+          <div className="text-xs text-neutral-500">
+            ⚠️ Warning: Invalid JSON will cause errors. Make sure your JSON is valid before saving.
+          </div>
+        </div>
       </div>
     </div>
   )

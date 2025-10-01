@@ -592,6 +592,115 @@ app.post('/api/final', async (req,res)=>{
   if (ok) io.emit('game:win', { accused });
 });
 
+// JSON File Editor endpoints
+const ALLOWED_JSON_FILES = ['game', 'players', 'characters', 'messages', 'nfc_cards', 'contacts', 'survey_data'];
+
+app.get('/api/json/:filename', async (req, res) => {
+  try {
+    const { filename } = req.params;
+    
+    if (!ALLOWED_JSON_FILES.includes(filename)) {
+      return res.status(403).json({ error: 'Access denied to this file' });
+    }
+    
+    let data;
+    switch (filename) {
+      case 'game':
+        data = game;
+        break;
+      case 'players':
+        data = players;
+        break;
+      case 'characters':
+        data = characters;
+        break;
+      case 'messages':
+        data = messages;
+        break;
+      case 'nfc_cards':
+        data = nfcCards;
+        break;
+      case 'contacts':
+        data = contacts;
+        break;
+      case 'survey_data':
+        data = surveyData;
+        break;
+      default:
+        return res.status(404).json({ error: 'File not found' });
+    }
+    
+    res.json(data);
+  } catch (error) {
+    console.error(`Error reading ${req.params.filename}.json:`, error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/json/:filename', async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const newData = req.body;
+    
+    if (!ALLOWED_JSON_FILES.includes(filename)) {
+      return res.status(403).json({ error: 'Access denied to this file' });
+    }
+    
+    // Validate JSON structure (basic validation)
+    if (typeof newData !== 'object' || newData === null) {
+      return res.status(400).json({ error: 'Invalid JSON data' });
+    }
+    
+    // Update the in-memory data and save to file
+    switch (filename) {
+      case 'game':
+        // Preserve some runtime state that shouldn't be overwritten
+        const preservedState = {
+          playersOnline: game.playersOnline,
+          startedAt: game.startedAt,
+          phase: game.phase
+        };
+        game = { ...newData, ...preservedState };
+        await writeJSON('game.json', game);
+        break;
+      case 'players':
+        players = newData;
+        await writeJSON('players.json', players);
+        break;
+      case 'characters':
+        characters = newData;
+        await writeJSON('characters.json', characters);
+        break;
+      case 'messages':
+        messages = newData;
+        await writeJSON('messages.json', messages);
+        break;
+      case 'nfc_cards':
+        nfcCards = newData;
+        await writeJSON('nfc_cards.json', nfcCards);
+        break;
+      case 'contacts':
+        contacts = newData;
+        await writeJSON('contacts.json', contacts);
+        break;
+      case 'survey_data':
+        surveyData = newData;
+        await writeJSON('survey_data.json', surveyData);
+        break;
+    }
+    
+    // Emit socket events for real-time updates if needed
+    if (filename === 'game') {
+      io.emit('game:phase', { phase: game.phase, startedAt: game.startedAt });
+    }
+    
+    res.json({ ok: true, message: `${filename}.json updated successfully` });
+  } catch (error) {
+    console.error(`Error writing ${req.params.filename}.json:`, error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Serve simple health
 app.get('/health', (req,res)=>res.json({ok:true, time: Date.now()}));
 
