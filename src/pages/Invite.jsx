@@ -290,7 +290,7 @@ function Envelope({ phase, onPrimaryClick, onLetterClick, reduceMotion }) {
                   </div>
                   <ul className="mt-4 mb-2 text-[13px] text-neutral-900 space-y-2 font-normal">
                     <li>
-                    <span className="inline-block px-2 py-1 rounded bg-neutral-100 text-neutral-700 font-semibold mr-2">Oct 4th at 5 pm</span>
+                    <span className="inline-block px-2 py-1 rounded bg-neutral-100 text-neutral-700 font-semibold mr-2">Oct 4th at 5 pm please be on time </span>
                     </li>
                     <li>
                     <span className="inline-block px-2 py-1 rounded bg-neutral-100 text-neutral-700 font-semibold mr-2">Dress in character / Business Casual</span>
