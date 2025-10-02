@@ -7,10 +7,19 @@ import axios from "axios";
 const API = import.meta.env.VITE_API_BASE;
 
 export default function Invite() {
-  const player = usePlayer();
+  const [player, setPlayer] = useState(null);
   const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
+    // Get player data from localStorage
+    try {
+      const playerData = JSON.parse(localStorage.getItem('player') || 'null');
+      setPlayer(playerData);
+    } catch (error) {
+      console.error('Error loading player data:', error);
+    }
+
+    // Fetch characters
     const fetchCharacters = async () => {
       try {
         const response = await axios.get(`${API}/api/characters`);
@@ -33,7 +42,7 @@ export default function Invite() {
         return {
           name: assignedCharacter.name,
           role: player?.role || "Employee",
-          avatar: player?.avatar || null,
+          avatar: assignedCharacter.avatar || null,
           goals: assignedCharacter.goals || [],
           flaws: assignedCharacter.flaws || [],
           backstory: assignedCharacter.backstory || "",
@@ -465,155 +474,151 @@ function WaxSeal() {
 /* ========================= */
 function ProfileDetails({ character }) {
   const initials = initialsFromName(character.name);
-  const player = usePlayer();
-
-  return (
-    <div className="space-y-6">
-      {/* Glassy identity card with early-2000s chrome gradient header */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-5 shadow-[0_12px_30px_rgba(0,0,0,.45)]">
-        <div className="flex items-center gap-4">
-          <div className="relative h-20 w-20 rounded-2xl overflow-hidden ring-1 ring-white/15 bg-gradient-to-br from-sky-500/40 to-indigo-500/40 grid place-items-center">
-            {character.avatar ? (
-              <img
-                src={character.avatar}
-                alt={character.name}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex items-center justify-center">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="w-10 h-10 text-white/80"
-                  fill="currentColor"
-                >
-                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H9L3 7V9H1V21H23V9H21ZM19 19H5V11H19V19ZM9 13H11V15H9V13ZM13 13H15V15H13V13Z" />
-                  <circle
-                    cx="18"
-                    cy="6"
-                    r="3"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    opacity="0.6"
-                  />
-                  <path
-                    d="M20 4L21.5 5.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    opacity="0.6"
-                  />
-                </svg>
-              </div>
-            )}
-            {/* floating shine */}
-            <motion.div
-              aria-hidden
-              className="pointer-events-none absolute -inset-6 skew-x-[20deg]"
-              animate={{ x: ["-60%", "130%"] }}
-              transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 2.4 }}
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, rgba(255,255,255,.25) 45%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.25) 55%, transparent)",
-              }}
-            />
-          </div>
-          <div>
-            <div className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
-              {character.name}
-            </div>
-            <div className="text-white/70 text-sm">{character.role}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Role Status */}
-      {player && (
-        <div className="text-center">
-          <div
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${
-              player.isKiller
-                ? "bg-red-600/20 text-red-300 border border-red-500/30"
-                : player.isDetective
-                ? "bg-sky-600/20 text-sky-300 border border-sky-500/30"
-                : "bg-emerald-600/20 text-emerald-300 border border-emerald-500/30"
-            }`}
-          >
-            {player.isKiller ? (
-              <>
-                <span>🔪</span>
-                <span>You are the killer</span>
-              </>
-            ) : player.isDetective ? (
-              <>
-                <span>🕵️</span>
-                <span>You are the detective</span>
-              </>
-            ) : (
-              <>
-                <span>✅</span>
-                <span>You are a civilian</span>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <SectionCard title="Goals">
-          <ul className="list-disc list-inside space-y-2 text-sm text-neutral-200">
-            {character.goals.map((g, i) => (
-              <li key={i}>{g}</li>
-            ))}
-          </ul>
-        </SectionCard>
-
-        <SectionCard title="Flaws">
-          <ul className="list-disc list-inside space-y-2 text-sm text-neutral-200">
-            {character.flaws.map((f, i) => (
-              <li key={i}>{f}</li>
-            ))}
-          </ul>
-        </SectionCard>
-      </div>
-
-      <SectionCard title="Backstory">
-        <p className="text-sm leading-relaxed text-neutral-200">
-          {character.backstory}
-        </p>
-      </SectionCard>
-    </div>
-  );
-}
-
-function SectionCard({ title, children }) {
-  return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-5 shadow-[0_12px_30px_rgba(0,0,0,.45)]">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-base font-semibold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
-          {title}
-        </h2>
-        <div className="h-[3px] w-16 rounded-full bg-gradient-to-r from-white/40 to-transparent" />
-      </div>
-      {children}
-    </div>
-  );
-}
-
-/* ========================= */
-/* Helpers                   */
-/* ========================= */
-function usePlayer() {
   const [player, setPlayer] = useState(null);
+
   useEffect(() => {
+    // Get player data from localStorage
     try {
-      const p = JSON.parse(localStorage.getItem("player") || "null");
-      setPlayer(p);
-    } catch {
-      setPlayer(null);
+      const playerData = JSON.parse(localStorage.getItem('player') || 'null');
+      setPlayer(playerData);
+    } catch (error) {
+      console.error('Error loading player data:', error);
     }
   }, []);
-  return player;
+
+  return (
+    <div className="space-y-8">
+      {/* Prominent Avatar Section - iPhone 4 Style */}
+      <div className="text-center">
+        <div className="relative inline-block">
+          {/* Outer glow ring */}
+          <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-400/30 via-purple-400/30 to-pink-400/30 blur-xl animate-pulse" />
+          
+          {/* Main avatar container - iPhone 4 style */}
+          <div className="relative h-32 w-32 rounded-full overflow-hidden ring-4 ring-white/20 shadow-2xl bg-gradient-to-br from-gray-200 via-gray-100 to-gray-300">
+            {/* Metallic inner ring */}
+            <div className="absolute inset-1 rounded-full bg-gradient-to-br from-gray-400 via-white to-gray-600 ring-2 ring-gray-300/50" />
+            
+            {/* Avatar image or initials */}
+            <div className="absolute inset-2 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              {character.avatar ? (
+                <img
+                  src={character.avatar}
+                  alt={character.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="text-2xl font-bold text-white drop-shadow-lg">
+                  {initials}
+                </div>
+              )}
+            </div>
+            
+            {/* Glossy overlay */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 via-transparent to-black/20" />
+            
+            {/* Inner highlight */}
+            <div className="absolute top-2 left-3 w-6 h-3 bg-white/60 rounded-full blur-sm" />
+          </div>
+          
+          {/* Corporate badge */}
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gradient-to-r from-gray-700 to-gray-900 text-white text-xs px-3 py-1 rounded-full shadow-lg border border-gray-600">
+            Blackwood Tower
+          </div>
+        </div>
+      </div>
+
+      {/* Identity Card - iPhone 4 Corporate Style */}
+      <div className="rounded-3xl border-2 border-gray-300/50 bg-gradient-to-br from-gray-50 via-white to-gray-100 backdrop-blur-md p-6 shadow-[0_20px_40px_rgba(0,0,0,.3)] overflow-hidden relative">
+        {/* Metallic header bar */}
+        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 border-b-2 border-gray-400 shadow-inner" />
+        
+        {/* Header content */}
+        <div className="relative pt-2 pb-4">
+          <div className="text-center">
+            <div className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent drop-shadow-sm">
+              {character.name}
+            </div>
+            <div className="text-gray-600 text-sm font-medium mt-1">
+              {character.role || "Employee"}
+            </div>
+          </div>
+        </div>
+
+        {/* Role Status Badge - Corporate Style */}
+        {player && (
+          <div className="flex justify-center mb-6">
+            <div
+              className={`inline-flex items-center gap-3 px-6 py-3 rounded-2xl font-bold text-sm shadow-lg border-2 ${
+                player.isKiller
+                  ? "bg-gradient-to-r from-red-500 to-red-600 text-white border-red-400 shadow-red-500/50"
+                  : player.isDetective
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-400 shadow-blue-500/50"
+                  : "bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400 shadow-green-500/50"
+              }`}
+            >
+              <div className="text-xl">
+                {player.isKiller ? "🔪" : player.isDetective ? "🕵️" : "✅"}
+              </div>
+              <span className="tracking-wide">
+                {player.isKiller ? "KILLER" : player.isDetective ? "DETECTIVE" : "CIVILIAN"}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Content Cards - iPhone 4 Style */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border-2 border-blue-200 shadow-inner">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs">🎯</span>
+              </div>
+              <h3 className="text-blue-800 font-bold text-sm">OBJECTIVES</h3>
+            </div>
+            <ul className="space-y-2 text-sm text-blue-700">
+              {character.goals.map((goal, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-1">•</span>
+                  <span>{goal}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 border-2 border-red-200 shadow-inner">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs">⚠️</span>
+              </div>
+              <h3 className="text-red-800 font-bold text-sm">WEAKNESSES</h3>
+            </div>
+            <ul className="space-y-2 text-sm text-red-700">
+              {character.flaws.map((flaw, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-red-500 mt-1">•</span>
+                  <span>{flaw}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Backstory Card - Prominent */}
+        <div className="mt-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-5 border-2 border-purple-200 shadow-inner">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs">📖</span>
+            </div>
+            <h3 className="text-purple-800 font-bold">PERSONAL BACKGROUND</h3>
+          </div>
+          <p className="text-purple-700 leading-relaxed text-sm">
+            {character.backstory}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function initialsFromName(name = "") {
