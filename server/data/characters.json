@@ -1,25 +1,271 @@
 [
   {
-    "id": "1e69aeaf-b8d9-402b-93a6-2cb4244291cd",
-    "name": "Test",
+    "id": "1c7b8c7a-5b6e-4f3d-8e9a-9b9a4c1d7e8f",
+    "name": "Jules Waller",
     "goals": [
-      "test"
+      "Defend someone accused of being the killer at least once."
     ],
     "flaws": [
-      "test"
+      "Has poor awareness of personal space; will randomly leave the group and return later, lying about where you were."
     ],
-    "backstory": "test"
+    "backstory": "Julia is a river-bed runner who journals exclusively in bullet points. She quotes UNITY like a mantra and fondly recalls her first team codename, Pallas—because some names just stick.",
+    "avatar": "/characters/juleswaller.png",
+    "isKiller": false,
+    "isDetective": false
   },
   {
-    "id": "761d2f4a-388a-4101-9fb7-17063963a933",
-    "name": "test2",
+    "id": "2d8c9d8b-6c7f-5e4e-9f0b-0c0b5d2e8f9a",
+    "name": "Conan Sol",
     "goals": [
-      "test2"
+      "Organize a team huddle that only ends when everyone does a chant (e.g., all hands in the middle, yelling 'go team!')."
     ],
     "flaws": [
-      "test2"
+      "Has an abrasive personality and constantly disagrees with everyone."
     ],
-    "backstory": "test2",
-    "avatar": "test2"
+    "backstory": "Conall treats code reviews like choreography and practices Wing Chun to reset his brain between builds. He once named variables after pasta shapes; his kid’s middle name is Ada, because of course it is.",
+    "avatar": "/characters/conansol.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "3e9d0e9c-7d8a-6f5f-a01c-1d1c6e3f9a0b",
+    "name": "Isla Browne",
+    "goals": [
+      "Create a secret hand language with another player and use it as often as possible without anyone else knowing what you're saying."
+    ],
+    "flaws": [
+      "Has an abrasive personality.",
+      "Whenever an accusation is made, they are unsure if it's the right decision."
+    ],
+    "backstory": "Isabelle speaks in headlines and thinks every crisis can become a good rebrand. She’s building a scrapbook called “Birds That Could Be Logos,” sourced all over Boulder. If you hear “we can spin this,” she’s warming up.",
+    "avatar": "/characters/islabrowne.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "4f0e1f0d-8e9b-7a6a-b12d-2e2d7f4a0b1c",
+    "name": "Jed Bavis",
+    "goals": [
+      "Convince one person that the person they suspect isn't the killer."
+    ],
+    "flaws": [
+      "Is 'seeing things'; keeps distracting people by pointing out random things (real or fake) in the area."
+    ],
+    "backstory": "Jeb runs on black coffee and log lines. He wears a patch that just says grep and can route a parade through an alley without breaking stride. If a cat appears, he will sneeze and apologize to it.",
+    "avatar": "/characters/jedbavis.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "5a1f2a1e-9f0c-8b7b-c23e-3f3e8a5b1c2d",
+    "name": "Diego Rodrigo",
+    "goals": [],
+    "flaws": [],
+    "backstory": "Elena is a sunscreened sleuth with a pelican case labeled “Evidence & Snacks.” She quotes her mentor SIFU K like scripture and will evangelize SPF 50 as if it’s a life philosophy.",
+    "avatar": "/characters/diegorodrigo.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "6b2a3b2f-0a1d-9c8c-d34f-4a4f9b6c2d3e",
+    "name": "Mason Reyd",
+    "goals": [
+      "Use your coin for the game as often as possible."
+    ],
+    "flaws": [
+      "You're an addicted gambler; everything needs to be a bet with you."
+    ],
+    "backstory": "Sam collects transit tokens and writes tiny maps of good shade spots. Decisions are made with a dramatic flip of a silver coin, then dutifully logged in a pocket notebook labeled “maybe.” Spent a sun-splashed summer in Boise cataloging benches by vibe.",
+    "avatar": "/characters/masonreyd.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "7c3b4c3a-1b2e-0d9d-e45a-5b5a0c7d3e4f",
+    "name": "Vance Whit",
+    "goals": [],
+    "flaws": [],
+    "backstory": "Urban bench cartographer who rates outdoor seats by “elbow diplomacy” and pigeon diplomacy. Keeps a pocket UV pen for spotting cool signage and has a scrapbook of curbside typography.",
+    "avatar": "/characters/vancewhit.png",
+    "isKiller": false,
+    "isDetective": true
+  },
+  {
+    "id": "8d4c5d4b-2c3f-1e0e-f56b-6c6b1d8e4f5a",
+    "name": "Lola Impato",
+    "goals": [
+      "Convince the group to take a vote on who they think the killer is."
+    ],
+    "flaws": [
+      "You're larger than life; embellish your backstory whenever you can."
+    ],
+    "backstory": "Opal’s a boardroom closer with café-kid energy—she still judges foam like a latte-art referee and claims every problem has a “cortado solution” (short, strong, clean). Weekend hobby: negotiating peace treaties between rival trivia teams.",
+    "avatar": "/characters/lolaimpato.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "9e5d6e5c-3d4a-2f1f-a67c-7d7c2e9f5a6b",
+    "name": "Luke Juno",
+    "goals": [
+      "Get accused of being the killer at least once."
+    ],
+    "flaws": [
+      "Convince the group to adopt a buddy system and then break it once."
+    ],
+    "backstory": "Lukey is a bike-route speedrunner whose bell is tuned to A440. He claims you can “draft” behind pedestrians and has named three shortcuts after himself.",
+    "avatar": "/characters/lukejuno.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "a6f7a76d-4e5b-3a2a-b78d-8e8d3f0a6b7c",
+    "name": "Aria Shaw",
+    "goals": [
+      "Get two different players to vouch for your location in the last 10 minutes."
+    ],
+    "flaws": [
+      "You don't like to overshare; make it hard for people to get your backstory out of you."
+    ],
+    "backstory": "Sarah carries a tiny stamp that says “nope” and edits commas mid-sprint. Her mural motto is NEIGHBORLY, and yes, her surname is Shaw—you’ll hear it when she corrects your forms.",
+    "avatar": "/characters/ariashaw.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "b7a8b87e-5f6c-4b3b-c89e-9f9e4a1b7c8d",
+    "name": "Janis Hadley",
+    "goals": [],
+    "flaws": [],
+    "backstory": "Nefeli treats cafés like libraries and can discuss ten kinds of cortado foam with alarming precision. Her favorite board-game alias is Pallas, and she grew up under Tempe sunsets collecting cool typefaces from street signs.",
+    "avatar": "/characters/janishadley.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "c8b9c98f-6a7d-5c4c-d90f-0a0f5b2c8d9e",
+    "name": "Lana Solan",
+    "goals": [
+      "'Umm, actually' the same person 4 times."
+    ],
+    "flaws": [
+      "Bad at directions; convince the group to go the wrong way as many times as you can."
+    ],
+    "backstory": "Lala is a brand witch with glitter tape and a waffle-iron sticker that reads “Liège or leave.” She has three kinds of confetti: launch, relaunch, and “oops but make it viral.”",
+    "avatar": "/characters/lanasolan.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "d9cad99a-7b8e-6d5d-ea1a-1b1a6c3d9ea0",
+    "name": "Nate Hankey",
+    "goals": [],
+    "flaws": [],
+    "backstory": "Nathan rescues vintage keyboards, names them after mountains, and insists he can smell lithium from ten feet. He grew up in Bismarck, loves command-line jokes, and treats grep like a lifestyle brand.",
+    "avatar": "/characters/natehankey.png",
+    "isKiller": true,
+    "isDetective": false
+  },
+  {
+    "id": "ebdbdab-8c9f-7e6e-fb2b-2c2b7d4ea0b1",
+    "name": "Zara Niles",
+    "goals": [
+      "You're a runner, you're a track star; convince the group to run somewhere twice."
+    ],
+    "flaws": [
+      "You are super cautious.",
+      "Support all accusations that you can."
+    ],
+    "backstory": "Zarine carries color-coded sticky tabs and can summon volunteers by clapping on two and four. Her knack for “herding cats” is so strong she once accidentally scheduled a flash-mob cleanup.",
+    "avatar": "/characters/zaraniles.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "fcfcecc-9da0-8f7f-ac3c-3d3c8e5fb1c2",
+    "name": "May Rae",
+    "goals": [
+      "Convince someone to go off with you in a group of two at least once."
+    ],
+    "flaws": [
+      "At the beginning of the game, choose someone you're convinced is the killer (and don't change this).",
+      "Convince as many people as you can that they are the killer throughout the game."
+    ],
+    "backstory": "Maya runs A/B tests on her socks. She interned at a lithium startup, hails from Fremont, and believes PCRE is a love language.",
+    "avatar": "/characters/mayrae.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "3dbd8354-3a29-43c2-9f55-142460fd460f",
+    "name": "Lex Ace",
+    "goals": [
+      "Insist you need to be the first to scan the nfc tag at lease once."
+    ],
+    "flaws": [
+      "cant be alone pick a player at the start of the game and never leave their side no matter what"
+    ],
+    "backstory": "Lex Ace walks like a floor plan and travels with a pocket color deck flipped to **Pantone 1585** by default. She once measured wind direction using only a tote bag and a squint. ",
+    "avatar": "/characters/lexace.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "635ae319-ec26-46bc-a37d-b197df2ac7aa",
+    "name": "Cal Bonamo",
+    "goals": [
+      "Accuse someone of being the killer at least once (if you dont know who the killer is LIE)"
+    ],
+    "flaws": [
+      "you like to walk slowly constantly convince the group your with to walk slower."
+    ],
+    "backstory": "Calvin is a spreadsheet sommelier who swirls pivot tables and says things like “notes of compliance.” He framed his toughest auditor’s surname on the wall like a championship belt: **Arkady**. ",
+    "avatar": "/characters/calbonamo.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "3ad58e08-edce-4cce-ad30-8512d3256b05",
+    "name": "Colter Wren",
+    "goals": [
+      "Stick to your guns if you say something and its ends up being incorrect",
+      "insist it is correct."
+    ],
+    "flaws": [
+      "GASLIGHT GATEKEEP GIRL BOSS as many times as you can convince people they said something they never said."
+    ],
+    "backstory": "Cole is a human diff tool who dreams in lookaheads. Favorite regex flavor is **PCRE** for reasons he’ll happily explain at length. ",
+    "avatar": "/characters/colterwren.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "481f7118-c1db-41ca-a297-8f1eb9b39c23",
+    "name": "Rey Cavallo",
+    "goals": [
+      "Double check just to make sure",
+      "don't take peoples word ask for clarification."
+    ],
+    "flaws": [
+      "convince one person they need to go find someone else desperately. Lie about the reason and if they ask you why you did that lie some more."
+    ],
+    "backstory": "Avery chats with intersections like old friends and keeps a scale model of a **Volvo XC90** on the desk. Surname **Cavallo**; favorite weather is “crisp map-folding breeze.” ",
+    "avatar": "/characters/reycavallo.png",
+    "isKiller": false,
+    "isDetective": false
+  },
+  {
+    "id": "0932842e-3189-45c6-896f-9a761e2e283f",
+    "name": "Drew Winard",
+    "goals": [
+      "Get three people to use the same **exact phrase** you coin"
+    ],
+    "flaws": [
+      "You think this game is deeper than it is. After solving a clue convince the group your with that there is more to that clue and your missing something."
+    ],
+    "backstory": "Drew Winard treats the city like a living dashboard he logs odd hums with a pocket field recorder, taps street poles in 5/4 to “calibrate,” and claims you can trace group confusion like a network packet. Favorite tee says YAGNI, and when things get crunchy he mutters, “hold on, I’ll strace this.”",
+    "avatar": "/characters/drewwinard.png",
+    "isKiller": false,
+    "isDetective": false
   }
 ]

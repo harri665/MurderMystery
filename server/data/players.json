@@ -1,22 +1,9 @@
 {
   "players": [
     {
-      "id": "harrison",
-      "name": "harrison martin",
-      "roleId": "killerA",
-      "isKiller": true,
-      "isDetective": false,
-      "fields": {
-        "codename": "Pallas",
-        "hometown": "Tempe",
-        "drink": "cortado"
-      }
-    },
-    {
-      "id": "0f52cbc2-22b8-49de-8bb0-bbe44914c4a3",
-      "name": "Andrew Widner",
-      "roleId": null,
-      "characterId": null,
+      "id": "d9e8e524-2b64-4e18-b9c0-63d4f2a8cb76",
+      "name": "Julia Wall",
+      "roleId": "narrator",
       "isKiller": false,
       "isDetective": false,
       "lastKillAt": 0,
@@ -28,7 +15,390 @@
           "ACT_II": 0,
           "ACT_III": 0
         }
-      }
+      },
+      "surveyResult": "narrator",
+      "surveyCompleted": true,
+      "characterId": "1c7b8c7a-5b6e-4f3d-8e9a-9b9a4c1d7e8f"
+    },
+    {
+      "id": "8afbfb6f-94d4-437e-80c7-14ef4024f1ae",
+      "name": "Opal Milota",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "8d4c5d4b-2c3f-1e0e-f56b-6c6b1d8e4f5a"
+    },
+    {
+      "id": "e6b0985b-502c-46eb-8a9d-0cdfa52e4ddd",
+      "name": "Vann Whitson-DeHerrera",
+      "roleId": "detective",
+      "isKiller": false,
+      "isDetective": true,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "detective",
+      "surveyCompleted": true,
+      "characterId": "7c3b4c3a-1b2e-0d9d-e45a-5b5a0c7d3e4f"
+    },
+    {
+      "id": "7da20776-51cd-4e12-b507-a6003f536468",
+      "name": "Isabelle Brown",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "3e9d0e9c-7d8a-6f5f-a01c-1d1c6e3f9a0b"
+    },
+    {
+      "id": "7750d4d8-7b3d-4178-b2dc-e7533b289119",
+      "name": "conall soon",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "2d8c9d8b-6c7f-5e4e-9f0b-0c0b5d2e8f9a"
+    },
+    {
+      "id": "3fa25883-2deb-43df-90df-504b345a0412",
+      "name": "Andrew Widner",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "0932842e-3189-45c6-896f-9a761e2e283f"
+    },
+    {
+      "id": "6c9024bc-7e82-4f8d-ad2a-f98a34fddecd",
+      "name": "Samuel Rodney",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "6b2a3b2f-0a1d-9c8c-d34f-4a4f9b6c2d3e"
+    },
+    {
+      "id": "6f01eec0-47c7-4da3-93ec-5fc2871f6177",
+      "name": "Alexis case",
+      "roleId": "narrator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "narrator",
+      "surveyCompleted": true,
+      "characterId": "3dbd8354-3a29-43c2-9f55-142460fd460f"
+    },
+    {
+      "id": "f9e3cdde-365f-4d86-ac91-caba2073755a",
+      "name": "Calvin Bonomo",
+      "roleId": "coordinator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "coordinator",
+      "surveyCompleted": true,
+      "characterId": "635ae319-ec26-46bc-a37d-b197df2ac7aa"
+    },
+    {
+      "id": "e1dda9ba-f255-4288-912e-247a3e1456b4",
+      "name": "Elena Rodriguez",
+      "roleId": "infiltrator",
+      "isKiller": true,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true,
+      "characterId": "5a1f2a1e-9f0c-8b7b-c23e-3f3e8a5b1c2d"
+    },
+    {
+      "id": "ecaaba1e-d0b7-48e3-afb9-5301c4c68001",
+      "name": "Jeb Davis",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "4f0e1f0d-8e9b-7a6a-b12d-2e2d7f4a0b1c"
+    },
+    {
+      "id": "4c6b808f-e523-4bb5-bb0a-7b7cec7bbe4f",
+      "name": "Nathan Keyt",
+      "roleId": "infiltrator",
+      "isKiller": true,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "infiltrator",
+      "surveyCompleted": true,
+      "characterId": "d9cad99a-7b8e-6d5d-ea1a-1b1a6c3d9ea0"
+    },
+    {
+      "id": "826eca34-eadf-47af-8d45-1de7bd8e4b9a",
+      "name": "lala anson",
+      "roleId": "coordinator",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "coordinator",
+      "surveyCompleted": true,
+      "characterId": "c8b9c98f-6a7d-5c4c-d90f-0a0f5b2c8d9e"
+    },
+    {
+      "id": "8043c52c-5f54-4df5-9d77-ec75839c9e2b",
+      "name": "Nefeli Hadjiyiannis",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "b7a8b87e-5f6c-4b3b-c89e-9f9e4a1b7c8d"
+    },
+    {
+      "id": "de54a33d-3b85-49e1-b320-19da7524539b",
+      "name": "Lukey joannou",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "9e5d6e5c-3d4a-2f1f-a67c-7d7c2e9f5a6b"
+    },
+    {
+      "id": "91b9db71-8942-4f84-bbbb-e8406f235dbc",
+      "name": "Cole Writer",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "3ad58e08-edce-4cce-ad30-8512d3256b05"
+    },
+    {
+      "id": "3ea6b08e-306e-4208-ab2d-47fd3ff2f5f2",
+      "name": "Avery Calloway",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "481f7118-c1db-41ca-a297-8f1eb9b39c23"
+    },
+    {
+      "id": "5ae95a16-c40c-4cc9-97c7-f0d500c7b881",
+      "name": "Maya Leizerovich",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "fcfcecc-9da0-8f7f-ac3c-3d3c8e5fb1c2"
+    },
+    {
+      "id": "552ad140-ae94-41d3-a02f-0df8ce644d66",
+      "name": "Sarah Johnson",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "a6f7a76d-4e5b-3a2a-b78d-8e8d3f0a6b7c"
+    },
+    {
+      "id": "d1547d22-b947-4f22-8e03-810de4663dcc",
+      "name": "Zarin Saifee",
+      "roleId": "analyst",
+      "isKiller": false,
+      "isDetective": false,
+      "lastKillAt": 0,
+      "downUntil": 0,
+      "abilities": {
+        "unpoisonLastAt": 0,
+        "revives": {
+          "ACT_I": 0,
+          "ACT_II": 0,
+          "ACT_III": 0
+        }
+      },
+      "surveyResult": "analyst",
+      "surveyCompleted": true,
+      "characterId": "ebdbdab-8c9f-7e6e-fb2b-2c2b7d4ea0b1"
     }
   ]
 }
