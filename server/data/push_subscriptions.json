@@ -1,0 +1,30 @@
+{
+  "subscriptions": [
+    {
+      "playerId": "ecaaba1e-d0b7-48e3-afb9-5301c4c68001",
+      "playerName": "Jeb Davis",
+      "subscription": {
+        "endpoint": "https://fcm.googleapis.com/fcm/send/fcJb3bfjgvo:APA91bEslETT8qtH7gZ-mK4cWt52hrS9tMXK9PDtkclsSHi3t0o4aUu0IuGU7ASb7fI561nnafH9iuIGvie55MRh9cJbUOGRplv4OaSzfvNNvgOK3ypCleWs8s2UHb5UfS2N-YaMJIuB",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BKD4Yh4tPYnHBDukxVO5WNjPL2OAJLl8qKbqZBSt2fO4HX9EMKn6-Hg3dT64iL87mJjdjQrMHvBmX234OwkgF6g",
+          "auth": "w2h9lCdSnr1IYfyq5jquzQ"
+        }
+      },
+      "subscribedAt": 1759615788721
+    },
+    {
+      "playerId": "d1547d22-b947-4f22-8e03-810de4663dcc",
+      "playerName": "Zarin Saifee",
+      "subscription": {
+        "endpoint": "https://wns2-by3p.notify.windows.com/w/?token=BQYAAADQtxeIjOnW5%2bV%2fU2PdYEglAFsnLY%2f3PYA7YPXMk8z9RiarbPdG9PDTSr1UftoDpav4rsjS7oyx5clYZWoHJ%2b%2fzN%2bu8ifoPjaMU7FsnmskMQ6yii90tKsRYviGeuL%2f9JLfABQtMJ9FhKWkRdun6Hit8ruUgaxjQcIzniBDhJIimw%2fm5zOeffMh1o7p9Y8iCb8DAEaMrYeYHl55cg5VTEOd7mnYqqaMrqVx7eHpE6RnJi5NMMcGAMxNTdSonwiu4wgRsw9upgOUPptw2jqJkueDfxjf5FFx%2b8szdMpTQAsN1DKWosf2aS6miJRNV5M83cHo%3d",
+        "expirationTime": null,
+        "keys": {
+          "p256dh": "BFTSvmVs53wJziH2rqx0xDVIIRVA_LhahMtKfGaIFSI43_G8DvWI8LCm1swS3jezrZRI_7qQDBK4pj4M9GqaS4I",
+          "auth": "mLQ_gFjvpgzWWGDI9e-M0Q"
+        }
+      },
+      "subscribedAt": 1759616856770
+    }
+  ]
+}

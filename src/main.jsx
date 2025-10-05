@@ -13,6 +13,9 @@ import Survey from './pages/Survey'
 import SurveyAdmin from './pages/SurveyAdmin'
 import Profile from './pages/Profile'
 import Invite from './pages/Invite'
+import Notifications from './pages/Notifications'
+import Map from './pages/Map'
+import Tag from './pages/Tag'
 import AuthWrapper from './components/AuthWrapper'
 
 const router = createBrowserRouter([
@@ -34,6 +37,9 @@ const router = createBrowserRouter([
       { path: 'kill', element: <Kill/> },
       { path: 'survey', element: <Survey/> },
       { path: 'survey-admin', element: <SurveyAdmin/> },
+      { path: 'notifications', element: <Notifications/> },
+      { path: 'map', element: <Map/> },
+      { path: 'tag', element: <Tag/> },
     ]
   },
   {
@@ -54,6 +60,9 @@ const router = createBrowserRouter([
       { path: 'kill', element: <Kill/> },
       { path: 'survey', element: <Survey/> },
       { path: 'survey-admin', element: <SurveyAdmin/> },
+      { path: 'notifications', element: <Notifications/> },
+      { path: 'map', element: <Map/> },
+      { path: 'tag', element: <Tag/> },
     ]
   }
 ])

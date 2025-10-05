@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import SignIn from './SignIn';
 import IPhoneFrame from './IPhoneFrame';
+import NotificationManager from '../utils/notificationManager';
 
 const API = import.meta.env.VITE_API_BASE || 'http://localhost:8080';
 
@@ -13,6 +14,7 @@ export default function AuthWrapper({ children }) {
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [redirectPath, setRedirectPath] = useState(null);
+  const [notificationPermission, setNotificationPermission] = useState('default');
   const { name: urlName } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,6 +58,9 @@ export default function AuthWrapper({ children }) {
         localStorage.setItem('login_timestamp', Date.now().toString());
         setPlayer(data.player);
         setIsAuthenticated(true);
+
+        // Register for push notifications
+        await registerPushNotifications(data.player);
 
         // Clean URL - remove the name parameter but keep nested path
         // e.g. /harrison/invite -> /invite
@@ -107,6 +112,50 @@ export default function AuthWrapper({ children }) {
     return true;
   };
 
+  // Register for push notifications after sign-in
+  const registerPushNotifications = async (playerData) => {
+    try {
+      if (!NotificationManager.isSupported()) {
+        console.log('Push notifications not supported');
+        return;
+      }
+
+      // Check if already subscribed
+      const isSubscribed = await NotificationManager.isSubscribed();
+      const storedPlayerId = localStorage.getItem('pushSubscriptionPlayerId');
+
+      // If not subscribed or subscribed with different player, subscribe
+      if (!isSubscribed || storedPlayerId !== playerData.id) {
+        console.log('Attempting to subscribe to push notifications...');
+        
+        // Get current permission
+        const currentPermission = NotificationManager.getPermission();
+        setNotificationPermission(currentPermission);
+
+        // Only auto-request if permission hasn't been denied
+        if (currentPermission === 'default') {
+          try {
+            await NotificationManager.subscribe(playerData.id, playerData.name);
+            setNotificationPermission('granted');
+            console.log('✅ Successfully subscribed to push notifications');
+          } catch (error) {
+            console.log('Push notification subscription declined or failed:', error.message);
+            setNotificationPermission(NotificationManager.getPermission());
+          }
+        } else if (currentPermission === 'granted') {
+          // Permission already granted, just subscribe
+          await NotificationManager.subscribe(playerData.id, playerData.name);
+          console.log('✅ Successfully subscribed to push notifications');
+        }
+      } else {
+        console.log('Already subscribed to push notifications');
+        setNotificationPermission('granted');
+      }
+    } catch (error) {
+      console.error('Error registering push notifications:', error);
+    }
+  };
+
   useEffect(() => {
     const initAuth = async () => {
       // Check if there's a name in the URL for auto-login
@@ -135,6 +184,12 @@ export default function AuthWrapper({ children }) {
           const playerData = JSON.parse(storedPlayer);
           setPlayer(playerData);
           setIsAuthenticated(true);
+
+          // Check and update notification permission status
+          if (NotificationManager.isSupported()) {
+            const currentPermission = NotificationManager.getPermission();
+            setNotificationPermission(currentPermission);
+          }
 
           // Then verify the token in the background
           const verifiedPlayer = await verifyToken(token);
@@ -182,12 +237,24 @@ export default function AuthWrapper({ children }) {
     }
   }, [redirectPath, isAuthenticated, navigate]);
 
-  const handleSignIn = (playerData, token) => {
+  const handleSignIn = async (playerData, token) => {
     setPlayer(playerData);
     setIsAuthenticated(true);
+    
+    // Register for push notifications after sign-in
+    await registerPushNotifications(playerData);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    // Unsubscribe from push notifications
+    if (player?.id) {
+      try {
+        await NotificationManager.unsubscribe(player.id);
+      } catch (error) {
+        console.error('Error unsubscribing from notifications:', error);
+      }
+    }
+
     localStorage.removeItem('jwt_token');
     localStorage.removeItem('player');
     localStorage.removeItem('login_timestamp');

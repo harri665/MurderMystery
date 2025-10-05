@@ -8,8 +8,16 @@ import cors from 'cors';
 import http from 'http';
 import { Server as IOServer } from 'socket.io';
 import jwt from 'jsonwebtoken';
+import webPush from 'web-push';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+// Web Push VAPID configuration
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'BBdvZpojnEEPWl2T7hvJoFdmL13yA3CmjEmdzOre3ZKzClI_lrgmO2YmTHKrE1M7eR-jGvvBwBnEN1Gyqrel_ck';
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'mjIAB-XhXmHGhovH7TYkhxxBq64qKQdb5BOBD7AIp_c';
+const VAPID_EMAIL = process.env.VAPID_EMAIL || 'mailto:admin@murdermystery.game';
+
+webPush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,6 +63,68 @@ function getAct(startedAt) {
   return 'ACT_III';
 }
 
+// Helper function to send push notifications to specific players
+async function sendPushNotification({ title, body, targetPlayerIds, url, icon, badge }) {
+  try {
+    const payload = JSON.stringify({
+      title,
+      body,
+      icon: icon || '/images/seal.png',
+      badge: badge || '/images/seal.png',
+      data: {
+        url: url || '/',
+        timestamp: Date.now(),
+        type: 'game-event'
+      }
+    });
+
+    let targetSubscriptions = pushSubscriptions.subscriptions;
+
+    // Filter by target players if specified
+    if (targetPlayerIds && Array.isArray(targetPlayerIds) && targetPlayerIds.length > 0) {
+      targetSubscriptions = pushSubscriptions.subscriptions.filter(
+        sub => targetPlayerIds.includes(sub.playerId)
+      );
+    }
+
+    if (targetSubscriptions.length === 0) {
+      console.log(`⚠️ No subscriptions found for target players`);
+      return { success: false, sent: 0 };
+    }
+
+    console.log(`📢 Sending push notification to ${targetSubscriptions.length} player(s)...`);
+
+    const results = await Promise.allSettled(
+      targetSubscriptions.map(async (sub) => {
+        try {
+          await webPush.sendNotification(sub.subscription, payload);
+          console.log(`  ✅ Notification sent to ${sub.playerName}`);
+          return { success: true };
+        } catch (error) {
+          console.error(`  ❌ Failed to send to ${sub.playerName}:`, error.message);
+          
+          // Remove invalid subscriptions
+          if (error.statusCode === 410 || error.statusCode === 404) {
+            pushSubscriptions.subscriptions = pushSubscriptions.subscriptions.filter(
+              s => s.playerId !== sub.playerId
+            );
+            await writeJSON('push_subscriptions.json', pushSubscriptions);
+            console.log(`  🗑️ Removed invalid subscription for ${sub.playerName}`);
+          }
+          
+          return { success: false };
+        }
+      })
+    );
+
+    const successful = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
+    return { success: true, sent: successful, total: results.length };
+  } catch (error) {
+    console.error('Error in sendPushNotification:', error);
+    return { success: false, sent: 0 };
+  }
+}
+
 // ----- load state -----
 let game = await readJSON('game.json', {
   startedAt: null,
@@ -79,6 +149,7 @@ let contacts = await readJSON('contacts.json', { submissions: [] });
 let nfcCards = await readJSON('nfc_cards.json', { cards: [] });
 let surveyData = await readJSON('survey_data.json', { responses: [] });
 let characters = await readJSON('characters.json', []);
+let pushSubscriptions = await readJSON('push_subscriptions.json', { subscriptions: [] });
 
 // quick index
 const playersById = () => Object.fromEntries(players.players.map(p=>[p.id,p]));
@@ -220,6 +291,158 @@ app.post('/api/gm/start', async (req,res)=>{
   await writeJSON('game.json', game);
   io.emit('game:phase', { phase: game.phase, startedAt: game.startedAt });
   res.json({ ok:true });
+});
+
+// Web Push Notification endpoints
+app.get('/api/vapid-public-key', (req, res) => {
+  res.json({ publicKey: VAPID_PUBLIC_KEY });
+});
+
+app.post('/api/push/subscribe', async (req, res) => {
+  try {
+    const { subscription, playerId, playerName } = req.body;
+    
+    if (!subscription || !playerId) {
+      return res.status(400).json({ error: 'Subscription and playerId required' });
+    }
+
+    // Check if subscription already exists for this player
+    const existingIndex = pushSubscriptions.subscriptions.findIndex(
+      sub => sub.playerId === playerId
+    );
+
+    if (existingIndex >= 0) {
+      // Update existing subscription
+      pushSubscriptions.subscriptions[existingIndex] = {
+        playerId,
+        playerName,
+        subscription,
+        subscribedAt: Date.now()
+      };
+    } else {
+      // Add new subscription
+      pushSubscriptions.subscriptions.push({
+        playerId,
+        playerName,
+        subscription,
+        subscribedAt: Date.now()
+      });
+    }
+
+    await writeJSON('push_subscriptions.json', pushSubscriptions);
+    console.log(`✅ Push subscription saved for player: ${playerName} (${playerId})`);
+    res.json({ ok: true, message: 'Subscription saved successfully' });
+  } catch (error) {
+    console.error('Error saving push subscription:', error);
+    res.status(500).json({ error: 'Failed to save subscription' });
+  }
+});
+
+app.post('/api/push/unsubscribe', async (req, res) => {
+  try {
+    const { playerId } = req.body;
+    
+    if (!playerId) {
+      return res.status(400).json({ error: 'playerId required' });
+    }
+
+    pushSubscriptions.subscriptions = pushSubscriptions.subscriptions.filter(
+      sub => sub.playerId !== playerId
+    );
+
+    await writeJSON('push_subscriptions.json', pushSubscriptions);
+    console.log(`🔕 Push subscription removed for player: ${playerId}`);
+    res.json({ ok: true, message: 'Subscription removed' });
+  } catch (error) {
+    console.error('Error removing push subscription:', error);
+    res.status(500).json({ error: 'Failed to remove subscription' });
+  }
+});
+
+// GM route to send notifications
+app.post('/api/gm/notify', async (req, res) => {
+  try {
+    const { title, body, targetPlayers, url, icon, badge } = req.body;
+
+    if (!title || !body) {
+      return res.status(400).json({ error: 'Title and body are required' });
+    }
+
+    const payload = JSON.stringify({
+      title,
+      body,
+      icon: icon || '/images/seal.png',
+      badge: badge || '/images/seal.png',
+      data: {
+        url: url || '/',
+        timestamp: Date.now(),
+        type: 'gm-notification'
+      }
+    });
+
+    let targetSubscriptions = pushSubscriptions.subscriptions;
+
+    // Filter by target players if specified
+    if (targetPlayers && Array.isArray(targetPlayers) && targetPlayers.length > 0) {
+      targetSubscriptions = pushSubscriptions.subscriptions.filter(
+        sub => targetPlayers.includes(sub.playerId)
+      );
+    }
+
+    if (targetSubscriptions.length === 0) {
+      return res.status(400).json({ 
+        error: 'No subscribed players found',
+        targetPlayers,
+        totalSubscriptions: pushSubscriptions.subscriptions.length
+      });
+    }
+
+    console.log(`📢 Sending notification to ${targetSubscriptions.length} player(s)...`);
+
+    const results = await Promise.allSettled(
+      targetSubscriptions.map(async (sub) => {
+        try {
+          await webPush.sendNotification(sub.subscription, payload);
+          console.log(`  ✅ Sent to ${sub.playerName}`);
+          return { success: true, playerName: sub.playerName, playerId: sub.playerId };
+        } catch (error) {
+          console.error(`  ❌ Failed to send to ${sub.playerName}:`, error.message);
+          
+          // Remove invalid subscriptions (e.g., expired or unsubscribed)
+          if (error.statusCode === 410 || error.statusCode === 404) {
+            pushSubscriptions.subscriptions = pushSubscriptions.subscriptions.filter(
+              s => s.playerId !== sub.playerId
+            );
+            await writeJSON('push_subscriptions.json', pushSubscriptions);
+            console.log(`  🗑️ Removed invalid subscription for ${sub.playerName}`);
+          }
+          
+          return { 
+            success: false, 
+            playerName: sub.playerName, 
+            playerId: sub.playerId,
+            error: error.message 
+          };
+        }
+      })
+    );
+
+    const successful = results.filter(r => r.status === 'fulfilled' && r.value.success).length;
+    const failed = results.length - successful;
+
+    res.json({
+      ok: true,
+      message: `Notification sent to ${successful} player(s)`,
+      successful,
+      failed,
+      total: results.length,
+      results: results.map(r => r.status === 'fulfilled' ? r.value : r.reason)
+    });
+
+  } catch (error) {
+    console.error('Error sending notifications:', error);
+    res.status(500).json({ error: 'Failed to send notifications' });
+  }
 });
 
 app.get('/api/players', async (req,res)=>{
@@ -566,7 +789,66 @@ app.post('/api/kill', async (req,res)=>{
   killer.lastKillAt = now();
   await writeJSON('players.json', players);
   io.emit('player:down', { targetId });
+  
+  // Send push notification to victim
+  await sendPushNotification({
+    title: '💀 You\'ve Been Eliminated!',
+    body: `You've been killed! You're down for ${game.downMinutes} minutes. Get to the medbay!`,
+    targetPlayerIds: [target.id],
+    url: '/profile',
+    icon: '/images/seal.png',
+    badge: '/images/seal.png'
+  });
+  
   res.json({ ok:true });
+});
+
+// Kill via URL with victim's first name (e.g., /kill?victim=harrison)
+app.get('/kill', async (req, res) => {
+  try {
+    const victimFirstName = req.query.victim;
+    
+    if (!victimFirstName || !victimFirstName.trim()) {
+      return res.status(400).json({ error: 'Victim first name required in query parameter: /kill?victim=firstname' });
+    }
+
+    const searchName = victimFirstName.toLowerCase().trim();
+
+    // Find player by first name (case-insensitive)
+    const victim = players.players.find(p => {
+      const playerFirstName = p.name.split(' ')[0].toLowerCase().trim();
+      return playerFirstName === searchName;
+    });
+
+    if (!victim) {
+      return res.status(404).json({ error: `Player with first name "${victimFirstName}" not found` });
+    }
+
+    // Send push notification to victim (no down system, just notify)
+    const notificationResult = await sendPushNotification({
+      title: '💀 You\'ve Been Eliminated!',
+      body: `You've been killed! Check your phone for details.`,
+      targetPlayerIds: [victim.id],
+      url: '/profile',
+      icon: '/images/seal.png',
+      badge: '/images/seal.png'
+    });
+
+    console.log(`🎯 ${victim.name} has been notified of kill via URL!`);
+
+    res.json({ 
+      ok: true, 
+      message: `${victim.name} has been notified!`,
+      victim: {
+        id: victim.id,
+        name: victim.name
+      },
+      notificationSent: notificationResult.sent > 0
+    });
+  } catch (error) {
+    console.error('Error in /kill route:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.post('/api/revive', async (req,res)=>{
@@ -593,7 +875,7 @@ app.post('/api/final', async (req,res)=>{
 });
 
 // JSON File Editor endpoints
-const ALLOWED_JSON_FILES = ['game', 'players', 'characters', 'messages', 'nfc_cards', 'contacts', 'survey_data'];
+const ALLOWED_JSON_FILES = ['game', 'players', 'characters', 'messages', 'nfc_cards', 'contacts', 'survey_data', 'push_subscriptions'];
 
 app.get('/api/json/:filename', async (req, res) => {
   try {
@@ -625,6 +907,9 @@ app.get('/api/json/:filename', async (req, res) => {
         break;
       case 'survey_data':
         data = surveyData;
+        break;
+      case 'push_subscriptions':
+        data = pushSubscriptions;
         break;
       default:
         return res.status(404).json({ error: 'File not found' });
@@ -686,6 +971,10 @@ app.post('/api/json/:filename', async (req, res) => {
       case 'survey_data':
         surveyData = newData;
         await writeJSON('survey_data.json', surveyData);
+        break;
+      case 'push_subscriptions':
+        pushSubscriptions = newData;
+        await writeJSON('push_subscriptions.json', pushSubscriptions);
         break;
     }
     

@@ -27,6 +27,14 @@ export default function Admin(){
   const [setRolePlayerId,setSetRolePlayerId] = useState('')
   const [setRoleType,setSetRoleType] = useState('')
 
+  // Notification state
+  const [notificationTitle, setNotificationTitle] = useState('')
+  const [notificationBody, setNotificationBody] = useState('')
+  const [notificationTargets, setNotificationTargets] = useState([])
+  const [notificationUrl, setNotificationUrl] = useState('/')
+  const [sendingNotification, setSendingNotification] = useState(false)
+  const [notificationResult, setNotificationResult] = useState(null)
+
   // JSON Editor state
   const [jsonFiles, setJsonFiles] = useState({
     game: '',
@@ -35,7 +43,8 @@ export default function Admin(){
     messages: '',
     nfc_cards: '',
     contacts: '',
-    survey_data: ''
+    survey_data: '',
+    push_subscriptions: ''
   })
   const [activeJsonTab, setActiveJsonTab] = useState('game')
   const [jsonLoading, setJsonLoading] = useState(false)
@@ -166,6 +175,67 @@ export default function Admin(){
     }
   }
 
+  // Notification functions
+  async function sendNotification() {
+    if (!notificationTitle || !notificationBody) {
+      alert('Title and body are required')
+      return
+    }
+
+    setSendingNotification(true)
+    setNotificationResult(null)
+
+    try {
+      const response = await axios.post(`${API}/api/gm/notify`, {
+        title: notificationTitle,
+        body: notificationBody,
+        targetPlayers: notificationTargets.length > 0 ? notificationTargets : undefined,
+        url: notificationUrl || '/',
+        icon: '/images/seal.png',
+        badge: '/images/seal.png'
+      })
+
+      setNotificationResult({
+        success: true,
+        message: response.data.message,
+        details: response.data
+      })
+
+      // Clear form on success
+      setNotificationTitle('')
+      setNotificationBody('')
+      setNotificationTargets([])
+      setNotificationUrl('/')
+    } catch (error) {
+      console.error('Error sending notification:', error)
+      setNotificationResult({
+        success: false,
+        message: error.response?.data?.error || 'Failed to send notification',
+        details: error.response?.data
+      })
+    } finally {
+      setSendingNotification(false)
+    }
+  }
+
+  function toggleNotificationTarget(playerId) {
+    setNotificationTargets(prev => {
+      if (prev.includes(playerId)) {
+        return prev.filter(id => id !== playerId)
+      } else {
+        return [...prev, playerId]
+      }
+    })
+  }
+
+  function selectAllPlayers() {
+    setNotificationTargets(players.map(p => p.id))
+  }
+
+  function clearAllPlayers() {
+    setNotificationTargets([])
+  }
+
   return (
     <div className="grid gap-4">
       <div className="card">
@@ -175,6 +245,113 @@ export default function Admin(){
             <div className="text-lg font-semibold">{game?.phase} {game?.act?`/ ${game.act}`:''}</div>
           </div>
           <button onClick={start} className="btn btn-primary">Start Game</button>
+        </div>
+      </div>
+
+      {/* Notification Section */}
+      <div className="card">
+        <h3 className="font-semibold mb-3 text-xl">📢 Send Push Notifications</h3>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium mb-1">Notification Title</label>
+            <input
+              className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
+              value={notificationTitle}
+              onChange={e => setNotificationTitle(e.target.value)}
+              placeholder="e.g., Important Game Update"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Notification Body</label>
+            <textarea
+              className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
+              value={notificationBody}
+              onChange={e => setNotificationBody(e.target.value)}
+              placeholder="e.g., A new clue has been discovered..."
+              rows="3"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Notification URL (optional)</label>
+            <input
+              className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
+              value={notificationUrl}
+              onChange={e => setNotificationUrl(e.target.value)}
+              placeholder="/profile or /nfc/tag123"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium">Target Players</label>
+              <div className="flex gap-2">
+                <button
+                  onClick={selectAllPlayers}
+                  className="text-xs px-2 py-1 rounded bg-blue-600 hover:bg-blue-700"
+                >
+                  Select All
+                </button>
+                <button
+                  onClick={clearAllPlayers}
+                  className="text-xs px-2 py-1 rounded bg-neutral-700 hover:bg-neutral-600"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div className="text-xs text-neutral-400 mb-2">
+              Leave empty to send to all subscribed players
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 bg-neutral-900 rounded border border-neutral-700">
+              {players.map(p => (
+                <label key={p.id} className="flex items-center gap-2 cursor-pointer hover:bg-neutral-800 p-1 rounded">
+                  <input
+                    type="checkbox"
+                    checked={notificationTargets.includes(p.id)}
+                    onChange={() => toggleNotificationTarget(p.id)}
+                    className="rounded border-neutral-700"
+                  />
+                  <span className="text-sm truncate">{p.name}</span>
+                </label>
+              ))}
+            </div>
+            {notificationTargets.length > 0 && (
+              <div className="text-xs text-blue-400 mt-1">
+                {notificationTargets.length} player(s) selected
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={sendNotification}
+            disabled={sendingNotification || !notificationTitle || !notificationBody}
+            className="btn btn-primary w-full"
+          >
+            {sendingNotification ? '📤 Sending...' : '📢 Send Notification'}
+          </button>
+
+          {notificationResult && (
+            <div className={`p-3 rounded border ${
+              notificationResult.success 
+                ? 'bg-green-900/20 border-green-600 text-green-400' 
+                : 'bg-red-900/20 border-red-600 text-red-400'
+            }`}>
+              <div className="font-semibold mb-1">
+                {notificationResult.success ? '✅ Success' : '❌ Error'}
+              </div>
+              <div className="text-sm">{notificationResult.message}</div>
+              {notificationResult.details && (
+                <details className="text-xs mt-2">
+                  <summary className="cursor-pointer">Details</summary>
+                  <pre className="mt-1 overflow-auto">
+                    {JSON.stringify(notificationResult.details, null, 2)}
+                  </pre>
+                </details>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
