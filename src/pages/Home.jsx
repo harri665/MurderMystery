@@ -72,6 +72,7 @@ function HomeScreen({ signOut }) {
       // { title: "Reminders", to: "/reminders", emoji: "✅", gradient: "from-zinc-300 to-zinc-600" },
       { title: "Invite", to: "/invite", emoji: "📨", gradient: "from-emerald-400 to-emerald-600" },
       { title: "Map", to: "/map", emoji: "🗺️", gradient: "from-sky-400 to-blue-600" },
+      { title: "Notifications", to: "/notifications", emoji: "🔔", gradient: "from-rose-400 to-rose-600" },
       // { title: "Settings", to: "/settings", emoji: "⚙️", gradient: "from-neutral-400 to-neutral-700" },
       { title: "Logout", to: "#", emoji: "🚪", gradient: "from-red-400 to-red-600", isLogout: true },
     ],
